@@ -1,0 +1,4 @@
+target "GJWebViewController" do 
+pod 'NJKWebViewProgress', '~> 0.2.3'
+pod 'AFNetworking', '~> 3.1.0'
+end
