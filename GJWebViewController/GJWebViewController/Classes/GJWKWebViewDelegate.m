@@ -2,7 +2,7 @@
 //  GJWKWebViewController.m
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/7/13.
+//  Created by Alien on 16/7/13.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 

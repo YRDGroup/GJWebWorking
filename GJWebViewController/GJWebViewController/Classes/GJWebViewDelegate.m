@@ -2,12 +2,13 @@
 //  GJWebViewDelegate.m
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/7/13.
+//  Created by Alien on 16/7/13.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 
 #import "GJWebViewDelegate.h"
 #import "GJWebViewWorking.h"
+#import "UIWebView+AFNetworking.h"
 @implementation GJWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
     NSURL *url = request.URL;
@@ -32,6 +33,12 @@
         
         return NO;
     }
+    
+//    [webView loadRequest:request progress:nil success:^NSString * _Nonnull(NSHTTPURLResponse * _Nonnull response, NSString * _Nonnull HTML) {
+//        return HTML;
+//    } failure:^(NSError * _Nonnull error) {
+//        NSLog(@"%@",error);
+//    }];
 
     return YES;
     

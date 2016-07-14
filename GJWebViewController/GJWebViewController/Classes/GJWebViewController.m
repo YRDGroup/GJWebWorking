@@ -2,7 +2,7 @@
 //  ViewController.m
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/5/24.
+//  Created by Alien on 16/5/24.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 /**
@@ -35,18 +35,19 @@
 
 
 #import "GJWebViewController.h"
+#import "UIWebView+AFNetworking.h"
 #import <WebKit/WebKit.h>
 #import "NJKWebViewProgress.h"
 #import "NJKWebViewProgressView.h"
 #import "GJWebViewWorking.h"
 #import "GJWKWebViewDelegate.h"
 #import "GJWebViewDelegate.h"
-
+#import "GJWebViewProtocol.h"
 //static NSString *const gj_webView_default_url = @"http://m1.yirendai.com/Sell/fromapp/enc_passportId?ppid=af68a52fefd44e6585d0020440eb7f38&from=app&to=user_center?ppid=af68a52fefd44e6585d0020440eb7f38&is_reg=0";
-static NSString *const gj_webView_default_url = @"http://www.baidu.com";
+static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 
 //([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
-#define gj_webView_isWKWebAvailable 1
+#define gj_webView_isWKWebAvailable 0
 
 
 
@@ -97,6 +98,11 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     [self makeWebView:nil];
+    
+    NSProgress *progress = [NSProgress progressWithTotalUnitCount:1];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        progress.completedUnitCount = 100;
+    });
 }
 
 
@@ -194,6 +200,13 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";
         [self.view addSubview:self.webView];
         dispatch_async(dispatch_get_main_queue(), ^{
              [self.webView loadRequest:request];
+//            static NSProgress *progress = nil;
+//            progress = [[NSProgress alloc]init];
+//            [self.webView loadRequest:request progress:nil success:^NSString * _Nonnull(NSHTTPURLResponse * _Nonnull response, NSString * _Nonnull HTML) {
+//                return HTML;
+//            } failure:^(NSError * _Nonnull error) {
+//                NSLog(@"%@",error);
+//            }];
         });
     }
     [self makeWebBGView];

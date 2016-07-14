@@ -2,7 +2,7 @@
 //  AppDelegate.m
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/5/24.
+//  Created by Alien on 16/5/24.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 

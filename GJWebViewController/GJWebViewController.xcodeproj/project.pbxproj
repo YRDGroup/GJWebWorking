@@ -17,6 +17,7 @@
 		9B9AE39E1CF44FF00091ECC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE39C1CF44FF00091ECC6 /* Main.storyboard */; };
 		9B9AE3A01CF44FF00091ECC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE39F1CF44FF00091ECC6 /* Assets.xcassets */; };
 		9B9AE3A31CF44FF00091ECC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE3A11CF44FF00091ECC6 /* LaunchScreen.storyboard */; };
+		9BD6B7031D37EBC300BB0FF8 /* GJWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,8 @@
 		9B9AE39F1CF44FF00091ECC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B9AE3A21CF44FF00091ECC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B9AE3A41CF44FF00091ECC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BD6B7011D37EBC300BB0FF8 /* GJWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebView.h; sourceTree = "<group>"; };
+		9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJWebView.m; sourceTree = "<group>"; };
 		9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewProtocol.h; sourceTree = "<group>"; };
 		AB45279E1073E76522568869 /* libPods-GJWebViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GJWebViewController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F071352F2357EEA19F0247DE /* Pods-GJWebViewController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GJWebViewController.release.xcconfig"; path = "Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController.release.xcconfig"; sourceTree = "<group>"; };
@@ -102,14 +105,16 @@
 		9BC3267C1D377F66005493CB /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				9B27BB321D363231006EA20E /* GJWebViewWorking.h */,
+				9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */,
 				9B27BB2F1D3630C3006EA20E /* GJWKWebViewDelegate.h */,
 				9B27BB301D3630C3006EA20E /* GJWKWebViewDelegate.m */,
-				9B9AE3991CF44FF00091ECC6 /* GJWebViewController.h */,
-				9B9AE39A1CF44FF00091ECC6 /* GJWebViewController.m */,
 				9B27BB2C1D362EDA006EA20E /* GJWebViewDelegate.h */,
 				9B27BB2D1D362EDA006EA20E /* GJWebViewDelegate.m */,
-				9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */,
-				9B27BB321D363231006EA20E /* GJWebViewWorking.h */,
+				9B9AE3991CF44FF00091ECC6 /* GJWebViewController.h */,
+				9B9AE39A1CF44FF00091ECC6 /* GJWebViewController.m */,
+				9BD6B7011D37EBC300BB0FF8 /* GJWebView.h */,
+				9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -267,6 +272,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BD6B7031D37EBC300BB0FF8 /* GJWebView.m in Sources */,
 				9B27BB311D3630C3006EA20E /* GJWKWebViewDelegate.m in Sources */,
 				9B0C7C0E1CFEC75C000C9549 /* ViewController.m in Sources */,
 				9B9AE39B1CF44FF00091ECC6 /* GJWebViewController.m in Sources */,
