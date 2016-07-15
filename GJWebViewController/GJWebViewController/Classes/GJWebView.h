@@ -8,11 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "GJWebViewProtocol.h"
-@interface GJWebView : UIView
-<
-GJWebViewProtocol
->
-@property (nonatomic ,copy, readwrite)GJWebShouldStartLoadBlock _Nullable shouldStartBlock;
-@property (nonatomic ,copy, readwrite)GJWebViewProgressBlock _Nullable progressBlock;
-@property (nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock _Nullable didFinshLoadBlock;
+@interface GJWebView : UIView <GJWebViewProtocol>
+
 @end

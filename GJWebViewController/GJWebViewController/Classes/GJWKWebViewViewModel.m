@@ -6,13 +6,67 @@
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 
-#import "GJWKWebViewDelegate.h"
+#import "GJWKWebViewViewModel.h"
 #import "GJWebViewWorking.h"
+#import <WebKit/WebKit.h>
+@interface GJWKWebViewViewModel()
+<
+WKUIDelegate,
+WKNavigationDelegate,
+WKScriptMessageHandler
+>
+@property (nonnull , nonatomic ,readwrite ,strong)WKWebView *webView;
+
+@end
+
+
+@implementation GJWKWebViewViewModel
+
+- (instancetype)init{
+    if (self = [super init]) {
+        WKUserContentController *userContentController = [[WKUserContentController alloc] init];
+        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+        configuration.userContentController = userContentController;
+        _webView = [[WKWebView alloc]initWithFrame:CGRectZero configuration:configuration];
+        _webView.navigationDelegate = self;
+        _webView.UIDelegate = self;
+        _webView.allowsBackForwardNavigationGestures = YES;
+        [_webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
+        [_webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    }
+    return self;
+}
+
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"estimatedProgress"]) {
+        !_progressBlock?:_progressBlock(_webView,_webView.estimatedProgress);
+    }
+    if ([keyPath isEqualToString:@"title"]) {
+//        self.title = self.wkWebView.title;
+    }
+}
+    
+- (void)gj_webViewCanGoBack:(void (^)(BOOL isCanBack))isCanBack{
+    [_webView evaluateJavaScript:@"goBack()" completionHandler:^(id jsCanGoBack, NSError * error) {
+        BOOL hasURLStack = [_webView canGoBack];
+        if (!jsCanGoBack) {
+            if (hasURLStack) {
+                [_webView goBack];
+                !isCanBack?:isCanBack(NO);
+            }
+        }
+        if (!jsCanGoBack && !hasURLStack) {
+            !isCanBack?:isCanBack(YES);
+        }
+        !isCanBack?:isCanBack(NO);
+        //             [(WKWebView *)_webView reloadFromOrigin];
+    }];
+}
 
 
 
-
-@implementation GJWKWebViewDelegate 
 #pragma mark-
 #pragma mark-  wkwebViewDelegate  implementation
 #pragma mark - WKNavigationDelegate 页面跳转
@@ -219,4 +273,9 @@
     return rootViewController;
 }
 
+
+- (void)dealloc{
+    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.webView removeObserver:self forKeyPath:@"title"];
+}
 @end

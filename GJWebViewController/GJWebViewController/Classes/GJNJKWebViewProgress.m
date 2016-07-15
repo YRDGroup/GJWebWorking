@@ -5,15 +5,15 @@
 //  Copyright (c) 2013 Satoshi Asano. All rights reserved.
 //
 
-#import "NJKWebViewProgress.h"
+#import "GJNJKWebViewProgress.h"
 
-NSString *completeRPCURL = @"webviewprogressproxy:///complete";
+NSString *GJ_completeRPCURL = @"webviewprogressproxy:///complete";
 
-const float NJKInitialProgressValue = 0.1f;
-const float NJKInteractiveProgressValue = 0.5f;
-const float NJKFinalProgressValue = 0.9f;
+const float GJ_NJKInitialProgressValue = 0.1f;
+const float GJ_NJKInteractiveProgressValue = 0.5f;
+const float GJ_NJKFinalProgressValue = 0.9f;
 
-@implementation NJKWebViewProgress
+@implementation GJNJKWebViewProgress
 {
     NSUInteger _loadingCount;
     NSUInteger _maxLoadCount;
@@ -33,15 +33,15 @@ const float NJKFinalProgressValue = 0.9f;
 
 - (void)startProgress
 {
-    if (_progress < NJKInitialProgressValue) {
-        [self setProgress:NJKInitialProgressValue];
+    if (_progress < GJ_NJKInitialProgressValue) {
+        [self setProgress:GJ_NJKInitialProgressValue];
     }
 }
 
 - (void)incrementProgress
 {
     float progress = self.progress;
-    float maxProgress = _interactive ? NJKFinalProgressValue : NJKInteractiveProgressValue;
+    float maxProgress = _interactive ?GJ_NJKFinalProgressValue : GJ_NJKInteractiveProgressValue;
     float remainPercent = (float)_loadingCount / (float)_maxLoadCount;
     float increment = (maxProgress - progress) * remainPercent;
     progress += increment;
@@ -80,7 +80,7 @@ const float NJKFinalProgressValue = 0.9f;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
-    if ([request.URL.absoluteString isEqualToString:completeRPCURL]) {
+    if ([request.URL.absoluteString isEqualToString:GJ_completeRPCURL]) {
         [self completeProgress];
         return NO;
     }
@@ -132,7 +132,7 @@ const float NJKFinalProgressValue = 0.9f;
     BOOL interactive = [readyState isEqualToString:@"interactive"];
     if (interactive) {
         _interactive = YES;
-        NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@'; document.body.appendChild(iframe);  }, false);", completeRPCURL];
+        NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@'; document.body.appendChild(iframe);  }, false);", GJ_completeRPCURL];
         [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     
@@ -157,7 +157,7 @@ const float NJKFinalProgressValue = 0.9f;
     BOOL interactive = [readyState isEqualToString:@"interactive"];
     if (interactive) {
         _interactive = YES;
-        NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@'; document.body.appendChild(iframe);  }, false);", completeRPCURL];
+        NSString *waitForCompleteJS = [NSString stringWithFormat:@"window.addEventListener('load',function() { var iframe = document.createElement('iframe'); iframe.style.display = 'none'; iframe.src = '%@'; document.body.appendChild(iframe);  }, false);", GJ_completeRPCURL];
         [webView stringByEvaluatingJavaScriptFromString:waitForCompleteJS];
     }
     

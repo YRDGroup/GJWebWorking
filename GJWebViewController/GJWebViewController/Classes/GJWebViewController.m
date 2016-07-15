@@ -37,17 +37,18 @@
 #import "GJWebViewController.h"
 #import "UIWebView+AFNetworking.h"
 #import <WebKit/WebKit.h>
-#import "NJKWebViewProgress.h"
-#import "NJKWebViewProgressView.h"
+#import "GJNJKWebViewProgress.h"
+#import "GJNJKWebViewProgressView.h"
 #import "GJWebViewWorking.h"
-#import "GJWKWebViewDelegate.h"
-#import "GJWebViewDelegate.h"
+#import "GJWKWebViewViewModel.h"
+#import "GJWebViewViewModel.h"
 #import "GJWebViewProtocol.h"
+#import "GJWebView.h"
 //static NSString *const gj_webView_default_url = @"http://m1.yirendai.com/Sell/fromapp/enc_passportId?ppid=af68a52fefd44e6585d0020440eb7f38&from=app&to=user_center?ppid=af68a52fefd44e6585d0020440eb7f38&is_reg=0";
 static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 
 //([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
-#define gj_webView_isWKWebAvailable 0
+//#define gj_webView_isWKWebAvailable 0
 
 
 
@@ -78,18 +79,11 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 @end
 
 
-@interface GJWebViewController ()<NJKWebViewProgressDelegate>
+@interface GJWebViewController ()
 
-@property (strong, nonatomic, readwrite) NJKWebViewProgressView *progressView;
-@property (strong, nonatomic, readwrite) NJKWebViewProgress *progressProxy;
-
-@property (strong, nonatomic, readwrite) WKWebView *wkWebView;
-@property (strong, nonatomic, readwrite) UIWebView *webView;
-@property (strong, nonatomic, readwrite) __GJWebBGView *bgView;
-
-@property (strong ,nonatomic ,readwrite) GJWebViewDelegate *webViewDelegate;
-@property (strong ,nonatomic ,readwrite) GJWKWebViewDelegate *wkWebViewDelegate;
-
+@property (strong, nonatomic, readwrite) GJNJKWebViewProgressView *progressView;
+@property (strong ,nonatomic, readwrite)__GJWebBGView *bgView;
+@property (strong, nonatomic ,readwrite)GJWebView *gjWebView;
 @end
 
 @implementation GJWebViewController
@@ -97,14 +91,63 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self makeWebView:nil];
+    _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
+    _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:_gjWebView];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     
-    NSProgress *progress = [NSProgress progressWithTotalUnitCount:1];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        progress.completedUnitCount = 100;
-    });
+    
+    [self makeWebBGView];
+    
+    __weak typeof(self) wSelf = self;
+    NSURLRequest *request = nil;
+    [self makeWebBGView];
+    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:13];
+    [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, UIWebViewNavigationType navigationType) {
+        NSURL *url = request.URL;
+        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
+            
+            return NO;
+        }
+        
+        //分享请求
+        if ([url.absoluteString hasPrefix:GCJSShareAPI]) {
+            
+            return NO;
+        }
+        //注册
+        if ([url.absoluteString hasPrefix:GCJSRegisterAPI]) {
+            
+            return NO;
+        }
+        //跳转购买宜定盈页面接口（buyProduct API）
+        if ([url.absoluteString hasPrefix:GCJSBuyProductAPI]) {
+            
+            return NO;
+        }
+        return  YES;
+    } progress:^(UIView * _Nonnull webView, float progress) {
+        NSLog(@"%f",progress);
+        [wSelf.progressView setProgress:progress animated:YES];
+    } didFinshLoad:^(UIView * _Nonnull webView, NSError * _Nullable error) {
+        NSLog(@"%@ --- %@",webView , error);
+    }];
+    
 }
+- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item{
 
+    __block BOOL canBack = NO;
+     [self.gjWebView gj_webViewCanGoBack:^(BOOL isCanBack) {
+         canBack = isCanBack;
+     }];
+    if (canBack) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    return canBack;
+}
 
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -118,48 +161,19 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
     [super viewDidDisappear:animated];
     [self.progressView removeFromSuperview];
 }
-- (void)dealloc{
-    if (gj_webView_isWKWebAvailable) {
-        [self.wkWebView removeObserver:self forKeyPath:@"estimatedProgress"];
-        [self.wkWebView removeObserver:self forKeyPath:@"title"];
-    }
-    
-}
 
-- (NJKWebViewProgressView *)progressView{
+
+- (GJNJKWebViewProgressView *)progressView{
     if (!_progressView && self.navigationController) {
         CGFloat progressBarHeight = 3.f;
         CGRect navigaitonBarBounds = self.navigationController.navigationBar.bounds;
         CGRect barFrame = CGRectMake(0, navigaitonBarBounds.size.height - progressBarHeight, navigaitonBarBounds.size.width, progressBarHeight);
-        _progressView = [[NJKWebViewProgressView alloc] initWithFrame:barFrame];
+        _progressView = [[GJNJKWebViewProgressView alloc] initWithFrame:barFrame];
         _progressView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
         _progressView.progressBarView.backgroundColor = [UIColor colorWithRed:0x00/255.f green:0xC2/255.f blue:0x15/255.f alpha:1.f];
         
     }
     return _progressView;
-}
-- (NJKWebViewProgress *)progressProxy{
-    if (!_progressProxy) {
-        _progressProxy = [[NJKWebViewProgress alloc] init];
-        _progressProxy.webViewProxyDelegate = self.webViewDelegate;
-        _progressProxy.progressDelegate = self;
-    }
-    return _progressProxy;
-}
-
-- (GJWebViewDelegate *)webViewDelegate{
-    if (!gj_webView_isWKWebAvailable && !_webViewDelegate) {
-        _webViewDelegate = [[GJWebViewDelegate alloc]init];
-    }
-    return _webViewDelegate;
-}
-
-- (GJWKWebViewDelegate *)wkWebViewDelegate{
-    if (gj_webView_isWKWebAvailable && !_wkWebViewDelegate) {
-        _wkWebViewDelegate = [[GJWKWebViewDelegate alloc]init];
-        
-    }
-    return _wkWebViewDelegate;
 }
 #pragma mark- bgViewMake
 
@@ -174,132 +188,12 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 - (void)makeWebBGView{
     __GJWebBGView *view = [[__GJWebBGView alloc]initWithFrame:self.view.bounds];
     view.titleLabel.text = _bgLabelText?:@"网页有www.yirendai.com提供";
-    if (gj_webView_isWKWebAvailable) {
-        [self.wkWebView insertSubview:view atIndex:0];
-    }else{
-        [self.webView insertSubview:view atIndex:0];
-    }
-    
+     [self.gjWebView.webView insertSubview:view atIndex:0];
     self.bgView = view;
 }
 
 
 #pragma mark- webView make
-- (void)makeWebView:(NSString *)urlStr{
-    NSURLRequest *request = nil;
-    urlStr = urlStr.length >0 ? urlStr : gj_webView_default_url;
-    
-    request =[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:13];
-   
-    if (gj_webView_isWKWebAvailable) {
-        [self.view addSubview:self.wkWebView];
-        dispatch_async(dispatch_get_main_queue(), ^{
-             [self.wkWebView loadRequest:request];
-        });
-    }else{
-        [self.view addSubview:self.webView];
-        dispatch_async(dispatch_get_main_queue(), ^{
-             [self.webView loadRequest:request];
-//            static NSProgress *progress = nil;
-//            progress = [[NSProgress alloc]init];
-//            [self.webView loadRequest:request progress:nil success:^NSString * _Nonnull(NSHTTPURLResponse * _Nonnull response, NSString * _Nonnull HTML) {
-//                return HTML;
-//            } failure:^(NSError * _Nonnull error) {
-//                NSLog(@"%@",error);
-//            }];
-        });
-    }
-    [self makeWebBGView];
-}
-
-
-- (WKWebView *)wkWebView{
-   
-    if (!_wkWebView && gj_webView_isWKWebAvailable) {
-        WKUserContentController *userContentController = [[WKUserContentController alloc] init];
-        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-        configuration.userContentController = userContentController;
-       
-        _wkWebView = [[WKWebView alloc]initWithFrame:CGRectZero configuration:configuration];
-        _wkWebView.navigationDelegate = self.wkWebViewDelegate;
-        _wkWebView.UIDelegate = self.wkWebViewDelegate;
-//        _wkWebView.opaque = YES;
-        _wkWebView.allowsBackForwardNavigationGestures = YES;
-        [_wkWebView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
-        [_wkWebView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
-    }
-    return _wkWebView;
-}
-
-
-
-- (UIWebView *)webView{
-    if (!_webView && !gj_webView_isWKWebAvailable) {
-        _webView = [[UIWebView alloc]init];
-        _webView.delegate = self.progressProxy;
-    }
-    return _webView;
-}
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"estimatedProgress"]) {
-        [_progressView setProgress:self.wkWebView.estimatedProgress animated:YES];
-    }
-    if ([keyPath isEqualToString:@"title"]) {
-        self.title = self.wkWebView.title;
-    }
-}
-
-- (void)viewDidLayoutSubviews{
-    [super viewDidLayoutSubviews];
-    CGSize size = self.view.bounds.size;
-    self.webView.frame = CGRectMake(0, 64, size.width, size.height - 64);
-    if (gj_webView_isWKWebAvailable) {
-        self.wkWebView.frame = CGRectMake(0, 64, size.width, size.height - 64);
-    }
-    
-}
-#pragma mark - NJKWebViewProgressDelegate
--(void)webViewProgress:(NJKWebViewProgress *)webViewProgress updateProgress:(float)progress
-{
-    [self.progressView setProgress:progress animated:YES];
-    self.title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
-}
-
-
-
-- (void)backButtonTapped {
-    if (gj_webView_isWKWebAvailable) {
-        [self.wkWebView evaluateJavaScript:@"goBack()" completionHandler:^(id jsCanGoBack, NSError * error) {
-            BOOL hasURLStack = [self.wkWebView canGoBack];
-            if (!jsCanGoBack) {
-                if (hasURLStack) {
-                    [self.wkWebView goBack];
-                }
-            }
-            if (!jsCanGoBack && !hasURLStack) {
-//                [super backButtonTapped];
-                return ;
-            }
-            // [self.wkWebView reloadFromOrigin];
-            
-        }];
-        
-        
-    }else{
-        BOOL jsCanGoBack = [self.webView stringByEvaluatingJavaScriptFromString:@"goBack()"].length;
-        BOOL hasURLStack = [self.webView canGoBack];
-        if (!jsCanGoBack) {
-            if (hasURLStack) {
-                [self.webView goBack];
-            }
-        }
-        if (!jsCanGoBack && !hasURLStack) {
-//            [super backButtonTapped];
-        }
-        //[self.webView reload];
-    }
-}
 
 
 - (void)didReceiveMemoryWarning {

@@ -5,9 +5,9 @@
 //  Copyright (c) 2013 Satoshi Asano. All rights reserved.
 //
 
-#import "NJKWebViewProgressView.h"
+#import "GJNJKWebViewProgressView.h"
 
-@implementation NJKWebViewProgressView
+@implementation GJNJKWebViewProgressView
 
 - (id)initWithFrame:(CGRect)frame
 {

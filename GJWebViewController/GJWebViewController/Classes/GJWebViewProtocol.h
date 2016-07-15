@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-@protocol GJWebViewProtocol;
+#import <UIKit/UIKit.h>
+#import "GJWebViewWorking.h"
 /**
  *  进度条Block
  *
@@ -33,22 +34,56 @@ typedef BOOL (^GJWebShouldStartLoadBlock) (UIView * _Nonnull webView, NSURLReque
  *  @param webView UIWebView 或者是 WKWebView
  */
 typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError * _Nullable error);
+
+/**
+ * viewModel
+ */
+@protocol GJWebViewViewModelPortocol <NSObject>
+
+/**
+ *  webView UIWebView 或者是 WKWebView
+ */
+@property (nonnull ,nonatomic ,strong ,readonly)UIView  * webView;
+
+/**
+ *  是否开发起请求的回调
+ */
+@property (nonatomic ,copy, readwrite)GJWebShouldStartLoadBlock _Nullable shouldStartBlock;
+/**
+ *  进度条Block
+ */
+@property (nonatomic ,copy, readwrite)GJWebViewProgressBlock _Nullable progressBlock;
+/**
+ *  webView加载结束时的回调
+ */
+@property (nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock _Nullable didFinshLoadBlock;
+
+/**
+ *  webView是否可以回退到生一个页面
+ */
+- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack;
+
+
+@end
+
 /**
  *  GJWebView抽象协议
  */
 @protocol GJWebViewProtocol <NSObject>
 /**
+ *  viewModel
+ */
+@property (nonnull, nonatomic ,strong , readonly) id<GJWebViewViewModelPortocol> gjWebViewModel;
+/**
  *  webView UIWebView 或者是 WKWebView
  */
-@property (nonatomic ,strong ,nonnull ,readonly)UIView *webView;
-
-
+@property (nonnull ,nonatomic ,strong ,readonly)UIView  * webView;
 /**
  *  webView是否可以回退到生一个页面
  */
-- (BOOL)gj_webViewCanGoBack;
+- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack;
 /**
- *  GJWebView发起一个请求
+ *  GJWebView发起一个请求 初始化传入的参数会传入viewModel 中
  *
  *  @param request      NSURLRequest
  *  @param shouldStart  将要发起请求的block 会多次请求
@@ -58,6 +93,6 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 - (void)gj_webViewLoadRequest:(NSURLRequest * _Nonnull)request
                    shouldSart:(_Nullable GJWebShouldStartLoadBlock)shouldStart
                      progress:(_Nullable GJWebViewProgressBlock)progress
-                      success:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad;
+                      didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad;
 
 @end
