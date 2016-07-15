@@ -47,9 +47,6 @@
                    shouldSart:(_Nullable GJWebShouldStartLoadBlock)shouldStart
                      progress:(_Nullable GJWebViewProgressBlock)progress
                       didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad{
-//    _shouldStartBlock   = [shouldStart copy];
-//    _progressBlock      = [progress copy];
-//    _didFinshLoadBlock  = [didFinshLoad copy];
     _gjWebViewModel.shouldStartBlock = shouldStart;
     _gjWebViewModel.progressBlock = progress;
     _gjWebViewModel.didFinshLoadBlock = didFinshLoad;
@@ -64,39 +61,10 @@
 
 - (void)gj_webViewCanGoBack:(void (^)(BOOL isCanBack))isCanBack{
     [_gjWebViewModel gj_webViewCanGoBack:isCanBack];
-    
-//    if (gj_webView_isWKWebAvailable) {
-//        [(WKWebView *)_webView evaluateJavaScript:@"goBack()" completionHandler:^(id jsCanGoBack, NSError * error) {
-//            BOOL hasURLStack = [(WKWebView *)_webView canGoBack];
-//            if (!jsCanGoBack) {
-//                if (hasURLStack) {
-//                    [(WKWebView *)_webView goBack];
-//                    !isCanBack?:isCanBack(NO);
-//                }
-//            }
-//            if (!jsCanGoBack && !hasURLStack) {
-//               !isCanBack?:isCanBack(YES);
-//            }
-////             [(WKWebView *)_webView reloadFromOrigin];
-//        }];
-//        return;
-//    }
-//    BOOL jsCanGoBack = [(UIWebView *)_webView stringByEvaluatingJavaScriptFromString:@"goBack()"].length;
-//    BOOL hasURLStack = [(UIWebView *)_webView canGoBack];
-//    if (!jsCanGoBack) {
-//        if (hasURLStack) {
-//            [(UIWebView *)_webView goBack];
-//            !isCanBack?:isCanBack(NO);
-//        }
-//    }
-//    if (!jsCanGoBack && !hasURLStack) {
-//        !isCanBack?:isCanBack(YES);
-//    }
-//    [(UIWebView *)_webView reload];
-
-
 }
-
+- (void)dealloc{
+    GJ_WebView_DLog(@"dealoc");
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

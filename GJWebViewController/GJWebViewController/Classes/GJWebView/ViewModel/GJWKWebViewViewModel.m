@@ -275,6 +275,7 @@ WKScriptMessageHandler
 
 
 - (void)dealloc{
+     GJ_WebView_DLog(@"dealoc");
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.webView removeObserver:self forKeyPath:@"title"];
 }

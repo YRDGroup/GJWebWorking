@@ -15,9 +15,7 @@
 <
 GJWebViewViewModelPortocol
 >
-
-//- (instancetype)init
-@property (nonatomic ,copy, readwrite)GJWebShouldStartLoadBlock _Nullable shouldStartBlock;
-@property (nonatomic ,copy, readwrite)GJWebViewProgressBlock _Nullable progressBlock;
-@property (nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock _Nullable didFinshLoadBlock;
+@property (nullable, nonatomic ,copy, readwrite)GJWebShouldStartLoadBlock shouldStartBlock;
+@property (nullable, nonatomic ,copy, readwrite)GJWebViewProgressBlock  progressBlock;
+@property (nullable, nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock  didFinshLoadBlock;
 @end

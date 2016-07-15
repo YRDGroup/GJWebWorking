@@ -7,10 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-/**
- *  GJWebViewController
- *  GJ 封装的webview WKViewController
- */
 @interface GJWebViewController : UIViewController
 @property (nonatomic ,copy, readwrite) NSString *bgLabelText;
 @end

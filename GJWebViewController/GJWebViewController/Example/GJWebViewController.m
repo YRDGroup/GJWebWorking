@@ -90,6 +90,7 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
     _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_gjWebView];
@@ -198,6 +199,11 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+- (void)dealloc{
+    [_gjWebView removeFromSuperview];
+    _gjWebView = nil;
+    GJ_WebView_DLog(@"dealoc");
 }
 
 @end

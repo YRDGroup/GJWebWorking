@@ -65,4 +65,7 @@ GJ_NJKWebViewProgressDelegate
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , error);
 }
+- (void)dealloc{
+    GJ_WebView_DLog(@"dealoc");
+}
 @end
