@@ -24,7 +24,6 @@ fprintf(stderr, "--------------------------------------------------------\n");  
 #define GJ_WebView_DLog(format, ...) do {} while (0)
 #endif
 
-#define gj_webView_isWKWebAvailable 1
 
 
 

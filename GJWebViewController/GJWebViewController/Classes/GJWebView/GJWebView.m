@@ -10,13 +10,12 @@
 #import <WebKit/WebKit.h>
 #import "GJWebViewViewModel.h"
 #import "GJWKWebViewViewModel.h"
+//([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+#define gj_webView_isWKWebAvailable 1
 @interface GJWebView(){
     UIView * _webView;
     id<GJWebViewViewModelPortocol> _gjWebViewModel;
 }
-
-
-
 @end
 
 @implementation GJWebView
@@ -59,8 +58,8 @@
 }
 
 
-- (void)gj_webViewCanGoBack:(void (^)(BOOL isCanBack))isCanBack{
-    [_gjWebViewModel gj_webViewCanGoBack:isCanBack];
+- (BOOL)gj_webViewCanGoBack{
+    return [self.gjWebViewModel gj_webViewCanGoBack];
 }
 - (void)dealloc{
     GJ_WebView_DLog(@"dealoc");

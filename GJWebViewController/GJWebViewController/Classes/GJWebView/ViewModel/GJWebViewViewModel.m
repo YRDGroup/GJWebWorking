@@ -40,19 +40,27 @@ GJ_NJKWebViewProgressDelegate
 /**
  *  webView是否可以回退到上一个页面
  */
-- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack{
-    BOOL jsCanGoBack = [_webView stringByEvaluatingJavaScriptFromString:@"goBack()"].length;
+
+- (BOOL)gj_webViewCanGoBack{
     BOOL hasURLStack = [_webView canGoBack];
-    if (!jsCanGoBack) {
-        if (hasURLStack) {
-            [_webView goBack];
-            !isCanBack?:isCanBack(NO);
-        }
+    if (hasURLStack) {
+        [_webView goBack];
     }
-    if (!jsCanGoBack && !hasURLStack) {
-        !isCanBack?:isCanBack(YES);
-    }
+    return !hasURLStack;
 }
+//- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack{
+//    BOOL jsCanGoBack = [_webView stringByEvaluatingJavaScriptFromString:@"goBack()"].length;
+//    BOOL hasURLStack = [_webView canGoBack];
+//    if (!jsCanGoBack) {
+//        if (hasURLStack) {
+//            [_webView goBack];
+//            !isCanBack?:isCanBack(NO);
+//        }
+//    }
+//    if (!jsCanGoBack && !hasURLStack) {
+//        !isCanBack?:isCanBack(YES);
+//    }
+//}
 #pragma mark - UIWebViewDelegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{

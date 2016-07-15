@@ -48,22 +48,25 @@ WKScriptMessageHandler
     }
 }
     
-- (void)gj_webViewCanGoBack:(void (^)(BOOL isCanBack))isCanBack{
-    [_webView evaluateJavaScript:@"goBack()" completionHandler:^(id jsCanGoBack, NSError * error) {
-        BOOL hasURLStack = [_webView canGoBack];
-        if (!jsCanGoBack) {
-            if (hasURLStack) {
-                [_webView goBack];
-                !isCanBack?:isCanBack(NO);
-            }
-        }
-        if (!jsCanGoBack && !hasURLStack) {
-            !isCanBack?:isCanBack(YES);
-        }
-        !isCanBack?:isCanBack(NO);
-        //             [(WKWebView *)_webView reloadFromOrigin];
-    }];
+- (BOOL)gj_webViewCanGoBack{
+    BOOL hasURLStack = [_webView canGoBack];
+    if (hasURLStack) {
+        [_webView goBack];
+    }
+    return !hasURLStack;
 }
+//    [_webView evaluateJavaScript:@"goBack()" completionHandler:^(id jsCanGoBack, NSError * error) {
+//        BOOL hasURLStack = [_webView canGoBack];
+//        if (!jsCanGoBack && hasURLStack) {
+//            [_webView goBack];
+//            !isCanBack?:isCanBack(NO);
+//        }else if (!jsCanGoBack && !hasURLStack) {
+//            !isCanBack?:isCanBack(YES);
+//            return ;
+//        }
+//        !isCanBack?:isCanBack(YES);
+//        //             [(WKWebView *)_webView reloadFromOrigin];
+//    }];
 
 
 
@@ -275,7 +278,6 @@ WKScriptMessageHandler
 
 
 - (void)dealloc{
-     GJ_WebView_DLog(@"dealoc");
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.webView removeObserver:self forKeyPath:@"title"];
 }

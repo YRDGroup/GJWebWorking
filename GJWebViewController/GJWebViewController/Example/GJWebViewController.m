@@ -43,11 +43,12 @@
 #import "GJWebViewViewModel.h"
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
+#import "UIViewController+BackButtonHandler.h"
 //static NSString *const gj_webView_default_url = @"http://m1.yirendai.com/Sell/fromapp/enc_passportId?ppid=af68a52fefd44e6585d0020440eb7f38&from=app&to=user_center?ppid=af68a52fefd44e6585d0020440eb7f38&is_reg=0";
 static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 
-//([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
-//#define gj_webView_isWKWebAvailable 0
+
+
 
 
 
@@ -78,7 +79,7 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 @end
 
 
-@interface GJWebViewController ()
+@interface GJWebViewController ()<UINavigationBarDelegate>
 
 @property (strong, nonatomic, readwrite) GJNJKWebViewProgressView *progressView;
 @property (strong ,nonatomic, readwrite)__GJWebBGView *bgView;
@@ -98,10 +99,8 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    
-    
     [self makeWebBGView];
-    
+//    self.navigationController.navigationBar.delegate = self;
     __weak typeof(self) wSelf = self;
     NSURLRequest *request = nil;
     [self makeWebBGView];
@@ -137,16 +136,13 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
     }];
     
 }
-- (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item{
 
-    __block BOOL canBack = NO;
-     [self.gjWebView gj_webViewCanGoBack:^(BOOL isCanBack) {
-         canBack = isCanBack;
-     }];
-    if (canBack) {
+-(BOOL) navigationShouldPopOnBackButton{
+    if ([_gjWebView gj_webViewCanGoBack]) {
         [self.navigationController popViewControllerAnimated:YES];
     }
-    return canBack;
+    
+    return NO;
 }
 
 - (void)viewDidAppear:(BOOL)animated{

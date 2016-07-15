@@ -61,7 +61,7 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 /**
  *  webView是否可以回退到生一个页面
  */
-- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack;
+- (BOOL)gj_webViewCanGoBack;
 
 
 @end
@@ -81,7 +81,7 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 /**
  *  webView是否可以回退到生一个页面
  */
-- (void)gj_webViewCanGoBack:(nonnull void (^)(BOOL isCanBack))isCanBack;
+- (BOOL)gj_webViewCanGoBack;
 /**
  *  GJWebView发起一个请求 初始化传入的参数会传入viewModel 中
  *
