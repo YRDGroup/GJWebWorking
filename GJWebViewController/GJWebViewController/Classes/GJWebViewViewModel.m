@@ -8,7 +8,6 @@
 
 #import "GJWebViewViewModel.h"
 #import "GJWebViewWorking.h"
-#import "UIWebView+AFNetworking.h"
 #import "GJNJKWebViewProgress.h"
 @interface GJWebViewViewModel()
 <

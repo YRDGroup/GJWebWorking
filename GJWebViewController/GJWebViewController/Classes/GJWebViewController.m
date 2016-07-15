@@ -35,7 +35,6 @@
 
 
 #import "GJWebViewController.h"
-#import "UIWebView+AFNetworking.h"
 #import <WebKit/WebKit.h>
 #import "GJNJKWebViewProgress.h"
 #import "GJNJKWebViewProgressView.h"
