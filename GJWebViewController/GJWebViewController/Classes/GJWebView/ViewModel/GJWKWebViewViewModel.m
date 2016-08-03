@@ -68,7 +68,9 @@ WKScriptMessageHandler
 //        //             [(WKWebView *)_webView reloadFromOrigin];
 //    }];
 
-
+- (NSArray <GJWebViewBackListItemProtocol>*)gjBackList{
+    return [_webView.backForwardList.backList copy];
+}
 
 #pragma mark-
 #pragma mark-  wkwebViewDelegate  implementation
@@ -157,22 +159,26 @@ WKScriptMessageHandler
 #pragma mark - WKNavigationDelegate 页面加载
 #pragma mark 页面开始加载时调用
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
+   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation{
+     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     webView.opaque = NO;
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 页面加载完成之后调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
+     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 页面加载失败时调用
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
+     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     GJ_WebView_DLog(@"--");
 }
 

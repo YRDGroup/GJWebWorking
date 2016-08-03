@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9B03256A1D51B3CA0008C4F2 /* GJWebViewBackListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */; };
 		9B0C7C0E1CFEC75C000C9549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C7C0D1CFEC75C000C9549 /* ViewController.m */; };
 		9B27BB2E1D362EDA006EA20E /* GJWebViewViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27BB2D1D362EDA006EA20E /* GJWebViewViewModel.m */; };
 		9B27BB311D3630C3006EA20E /* GJWKWebViewViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27BB301D3630C3006EA20E /* GJWKWebViewViewModel.m */; };
@@ -17,12 +18,16 @@
 		9B9AE39E1CF44FF00091ECC6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE39C1CF44FF00091ECC6 /* Main.storyboard */; };
 		9B9AE3A01CF44FF00091ECC6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE39F1CF44FF00091ECC6 /* Assets.xcassets */; };
 		9B9AE3A31CF44FF00091ECC6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B9AE3A11CF44FF00091ECC6 /* LaunchScreen.storyboard */; };
+		9BA4E1981D3DD79400F0EFBE /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BA4E1971D3DD79400F0EFBE /* LocalAuthentication.framework */; };
 		9BD6B7031D37EBC300BB0FF8 /* GJWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */; };
 		9BD6B7071D38A56600BB0FF8 /* GJNJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD6B7061D38A56600BB0FF8 /* GJNJKWebViewProgress.m */; };
 		9BD6B70B1D38A75200BB0FF8 /* GJNJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BD6B70A1D38A75200BB0FF8 /* GJNJKWebViewProgressView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9B0325681D51B3CA0008C4F2 /* GJWebViewBackListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GJWebViewBackListItem.h; path = ../GJWebViewBackListItem.h; sourceTree = "<group>"; };
+		9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GJWebViewBackListItem.m; path = ../GJWebViewBackListItem.m; sourceTree = "<group>"; };
+		9B03256B1D51BB210008C4F2 /* GJWebViewBackListItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewBackListItemProtocol.h; sourceTree = "<group>"; };
 		9B0C7C0C1CFEC75C000C9549 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		9B0C7C0D1CFEC75C000C9549 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		9B27BB2C1D362EDA006EA20E /* GJWebViewViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewViewModel.h; sourceTree = "<group>"; };
@@ -42,6 +47,7 @@
 		9B9AE39F1CF44FF00091ECC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9B9AE3A21CF44FF00091ECC6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9B9AE3A41CF44FF00091ECC6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BA4E1971D3DD79400F0EFBE /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		9BD6B7011D37EBC300BB0FF8 /* GJWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebView.h; sourceTree = "<group>"; };
 		9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJWebView.m; sourceTree = "<group>"; };
 		9BD6B7051D38A56600BB0FF8 /* GJNJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJNJKWebViewProgress.h; sourceTree = "<group>"; };
@@ -56,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9BA4E1981D3DD79400F0EFBE /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +76,8 @@
 				9B27BB301D3630C3006EA20E /* GJWKWebViewViewModel.m */,
 				9B27BB2C1D362EDA006EA20E /* GJWebViewViewModel.h */,
 				9B27BB2D1D362EDA006EA20E /* GJWebViewViewModel.m */,
+				9B0325681D51B3CA0008C4F2 /* GJWebViewBackListItem.h */,
+				9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -82,6 +91,7 @@
 				9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */,
 				9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */,
 				9B27BB321D363231006EA20E /* GJWebViewWorking.h */,
+				9B03256B1D51BB210008C4F2 /* GJWebViewBackListItemProtocol.h */,
 			);
 			path = GJWebView;
 			sourceTree = "<group>";
@@ -186,6 +196,7 @@
 		C891581C4BF86C22B90EAA81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9BA4E1971D3DD79400F0EFBE /* LocalAuthentication.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -266,6 +277,7 @@
 				9B27BB311D3630C3006EA20E /* GJWKWebViewViewModel.m in Sources */,
 				9B0C7C0E1CFEC75C000C9549 /* ViewController.m in Sources */,
 				9B9AE39B1CF44FF00091ECC6 /* GJWebViewController.m in Sources */,
+				9B03256A1D51B3CA0008C4F2 /* GJWebViewBackListItem.m in Sources */,
 				9B27BB2E1D362EDA006EA20E /* GJWebViewViewModel.m in Sources */,
 				9B9AE3981CF44FEF0091ECC6 /* AppDelegate.m in Sources */,
 				9BD6B70B1D38A75200BB0FF8 /* GJNJKWebViewProgressView.m in Sources */,

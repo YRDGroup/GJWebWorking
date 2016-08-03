@@ -11,7 +11,7 @@
 #import "GJWebViewViewModel.h"
 #import "GJWKWebViewViewModel.h"
 //([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
-#define gj_webView_isWKWebAvailable 1
+#define gj_webView_isWKWebAvailable 0
 @interface GJWebView(){
     UIView * _webView;
     id<GJWebViewViewModelPortocol> _gjWebViewModel;
@@ -61,6 +61,8 @@
 - (BOOL)gj_webViewCanGoBack{
     return [self.gjWebViewModel gj_webViewCanGoBack];
 }
+
+
 - (void)dealloc{
     GJ_WebView_DLog(@"dealoc");
 }

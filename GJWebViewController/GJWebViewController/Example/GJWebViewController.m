@@ -47,12 +47,6 @@
 //static NSString *const gj_webView_default_url = @"http://m1.yirendai.com/Sell/fromapp/enc_passportId?ppid=af68a52fefd44e6585d0020440eb7f38&from=app&to=user_center?ppid=af68a52fefd44e6585d0020440eb7f38&is_reg=0";
 static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 
-
-
-
-
-
-
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
 @end
@@ -84,6 +78,8 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 @property (strong, nonatomic, readwrite) GJNJKWebViewProgressView *progressView;
 @property (strong ,nonatomic, readwrite)__GJWebBGView *bgView;
 @property (strong, nonatomic ,readwrite)GJWebView *gjWebView;
+
+
 @end
 
 @implementation GJWebViewController
@@ -100,7 +96,6 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     [self makeWebBGView];
-//    self.navigationController.navigationBar.delegate = self;
     __weak typeof(self) wSelf = self;
     NSURLRequest *request = nil;
     [self makeWebBGView];
@@ -196,6 +191,9 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
 - (void)dealloc{
     [_gjWebView removeFromSuperview];
     _gjWebView = nil;

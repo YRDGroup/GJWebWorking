@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 @interface ViewController ()
 @end
 
@@ -54,15 +55,36 @@
     
 
 }
-
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
+//
+//- (void)viewDidAppear:(BOOL)animated{
+//    [super viewDidAppear:animated];
 //    UIView *maskView = [[UIView alloc] initWithFrame:self.view.bounds];
 //    maskView.backgroundColor = [UIColor grayColor];
 //    maskView.alpha = 0.4;
-//    self.view.maskView = maskView;
-
-}
+////    [[UIApplication sharedApplication].windows firstObject].maskView = maskView;
+//    if (self.navigationController) {
+//       self.navigationController.view.maskView = maskView;
+//    }else{
+//       self.view.maskView = maskView;
+//    }
+//    
+//    UIView *view = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 200, 200)];
+//    view.backgroundColor = [UIColor redColor];
+//    view.layer.cornerRadius = 50;
+//    [self.navigationController.view addSubview:view];
+//    view.center = self.view.center;
+//    
+////    LAContext *myContext = [[LAContext alloc] init];
+////    NSError *error = nil;
+////    if (![myContext canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+////        NSLog(@"%@",error);
+////        return;
+////    }
+////    [myContext evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"hello TouchID" reply:^(BOOL success, NSError * _Nullable error) {
+////        NSLog(@"%@",error);
+////    }];
+//
+//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

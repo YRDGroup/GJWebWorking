@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import "GJWebViewWorking.h"
+#import "GJWebViewBackListItemProtocol.h"
 /**
  *  进度条Block
  *
@@ -63,6 +64,10 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
  */
 - (BOOL)gj_webViewCanGoBack;
 
+/**
+ *  返回请求列表
+ */
+@property (nonnull ,nonatomic ,strong ,readonly)NSArray <GJWebViewBackListItemProtocol > *gjBackList;
 
 @end
 
@@ -78,6 +83,8 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
  *  webView UIWebView 或者是 WKWebView
  */
 @property (nonnull ,nonatomic ,strong ,readonly)UIView  * webView;
+
+
 /**
  *  webView是否可以回退到生一个页面
  */
