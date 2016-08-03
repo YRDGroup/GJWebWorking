@@ -179,7 +179,7 @@ static NSString *const gj_webView_default_url = @"https://www.baidu.com";
 - (void)makeWebBGView{
     __GJWebBGView *view = [[__GJWebBGView alloc]initWithFrame:self.view.bounds];
     view.titleLabel.text = _bgLabelText?:@"网页有www.yirendai.com提供";
-     [self.gjWebView.webView insertSubview:view atIndex:0];
+     [self.gjWebView.webView insertSubview:view belowSubview:self.gjWebView.webScrollView];
     self.bgView = view;
 }
 

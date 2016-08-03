@@ -78,13 +78,13 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 /**
  *  viewModel
  */
-@property (nonnull, nonatomic ,strong , readonly) id<GJWebViewViewModelPortocol> gjWebViewModel;
+@property (nonnull ,nonatomic ,strong , readonly) id<GJWebViewViewModelPortocol> gjWebViewModel;
 /**
  *  webView UIWebView 或者是 WKWebView
  */
 @property (nonnull ,nonatomic ,strong ,readonly)UIView  * webView;
 
-
+@property (nonnull ,nonatomic ,strong ,readonly)UIScrollView *webScrollView;
 /**
  *  webView是否可以回退到生一个页面
  */
