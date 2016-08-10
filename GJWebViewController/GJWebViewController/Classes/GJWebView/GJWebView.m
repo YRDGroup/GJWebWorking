@@ -10,8 +10,8 @@
 #import <WebKit/WebKit.h>
 #import "GJWebViewViewModel.h"
 #import "GJWKWebViewViewModel.h"
-//
-#define gj_webView_isWKWebAvailable  ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+// ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
+#define gj_webView_isWKWebAvailable 0
 @interface GJWebView(){
     UIView * _webView;
     id<GJWebViewViewModelPortocol> _gjWebViewModel;
@@ -38,7 +38,8 @@
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    }
+        
+           }
     return self;
 }
 
@@ -49,12 +50,7 @@
     _gjWebViewModel.shouldStartBlock = shouldStart;
     _gjWebViewModel.progressBlock = progress;
     _gjWebViewModel.didFinshLoadBlock = didFinshLoad;
-    if (gj_webView_isWKWebAvailable) {
-        [(WKWebView *)_webView loadRequest:request];
-    }else{
-        [(UIWebView *)_webView loadRequest:request];
-    }
-    
+    [_gjWebViewModel gj_loadRequest:request];  
 }
 
 - (UIScrollView *)webScrollView{
@@ -64,9 +60,7 @@
         return [(UIWebView *)_webView scrollView];
     }
 }
-- (BOOL)gj_webViewCanGoBack{
-    return [self.gjWebViewModel gj_webViewCanGoBack];
-}
+
 
 
 - (void)dealloc{

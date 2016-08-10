@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @interface GJWebViewController : UIViewController
-@property (nonatomic ,copy, readwrite) NSString *bgLabelText;
+
+
 @end
 

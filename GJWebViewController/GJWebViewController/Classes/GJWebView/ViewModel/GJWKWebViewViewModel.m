@@ -16,11 +16,13 @@ WKNavigationDelegate,
 WKScriptMessageHandler
 >
 @property (nonnull , nonatomic ,readwrite ,strong)WKWebView *webView;
+@property (assign ,nonatomic ,readwrite)BOOL gj_webViewCanGoBack;
 
 @end
 
 
 @implementation GJWKWebViewViewModel
+@synthesize gj_webViewCanGoBack = _gj_webViewCanGoBack;
 
 - (instancetype)init{
     if (self = [super init]) {
@@ -33,28 +35,56 @@ WKScriptMessageHandler
         _webView.allowsBackForwardNavigationGestures = YES;
         [_webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
         [_webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+        [_webView addObserver:self forKeyPath:@"canGoBack" options:NSKeyValueObservingOptionNew context:nil];
+        [self performSelector:@selector(resetState) withObject:nil withObject:nil];
+        
     }
     return self;
 }
+- (void)resetState{
+    [self gj_webViewCanGoBack];
+}
 
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
         !_progressBlock?:_progressBlock(_webView,_webView.estimatedProgress);
     }
     if ([keyPath isEqualToString:@"title"]) {
-//        self.title = self.wkWebView.title;
     }
+    if ([keyPath isEqualToString:@"canGoBack"]) {
+       [self setGj_webViewCanGoBack:[change[NSKeyValueChangeNewKey] boolValue]];
+    }
+ 
+
 }
-    
+- (void)gj_goBack{
+    [(WKWebView *)self.webView goBack];
+}
 - (BOOL)gj_webViewCanGoBack{
     BOOL hasURLStack = [_webView canGoBack];
-    if (hasURLStack) {
-        [_webView goBack];
+    if (hasURLStack  != _gj_webViewCanGoBack) {
+        [self setGj_webViewCanGoBack:hasURLStack];
     }
-    return !hasURLStack;
+    return _gj_webViewCanGoBack;
 }
+
+- (void)setGj_webViewCanGoBack:(BOOL)gj_webViewCanGoBack{
+
+    if (_gj_webViewCanGoBack == gj_webViewCanGoBack) {
+        return;
+    }
+    [self willChangeValueForKey:NSStringFromSelector(@selector(gj_webViewCanGoBack))];
+    _gj_webViewCanGoBack = gj_webViewCanGoBack;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(gj_webViewCanGoBack))];
+  
+}
+
+
+
+- (void)gj_loadRequest:(NSURLRequest *)request{
+    [self.webView loadRequest:request];
+}
+
 
 
 - (NSArray <GJWebViewBackListItemProtocol>*)gjBackList{
@@ -93,25 +123,32 @@ WKScriptMessageHandler
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
-    //登录请求
-    if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
-        
-        return;
-    }
     
-    //分享请求
-    if ([url.absoluteString hasPrefix:GCJSShareAPI]) {
-        
-        return;
+    GJWebNavgitionType navType = GJWKNavigationTypeOther;
+    switch (navigationAction.navigationType) {
+        case WKNavigationTypeLinkActivated:
+            navType = GJWKNavigationTypeLinkActivated;
+            break;
+        case WKNavigationTypeFormSubmitted:
+            navType = GJWKNavigationTypeFormSubmitted;
+            break;
+        case WKNavigationTypeBackForward:
+            navType = GJWKNavigationTypeBackForward;
+            break;
+        case WKNavigationTypeReload:
+            navType = GJWKNavigationTypeReload;
+            break;
+        case WKNavigationTypeFormResubmitted:
+            navType = GJWKNavigationTypeFormResubmitted;
+            break;
+        case WKNavigationTypeOther:
+            navType = GJWKNavigationTypeOther;
+            break;
+        default:
+            break;
     }
-    //注册
-    if ([url.absoluteString hasPrefix:GCJSRegisterAPI]) {
-        
-        return;
-    }
-    //跳转购买宜定盈页面接口（buyProduct API）
-    if ([url.absoluteString hasPrefix:GCJSBuyProductAPI]) {
-        
+    if (!(!_shouldStartBlock? YES:_shouldStartBlock(_webView,navigationAction.request ,navType))) {
+        decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
      decisionHandler(WKNavigationActionPolicyAllow);
@@ -148,27 +185,27 @@ WKScriptMessageHandler
 #pragma mark - WKNavigationDelegate 页面加载
 #pragma mark 页面开始加载时调用
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
-   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 当内容开始返回时调用
 - (void)webView:(WKWebView *)webView didCommitNavigation:(null_unspecified WKNavigation *)navigation{
-     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-   
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 页面加载完成之后调用
 - (void)webView:(WKWebView *)webView didFinishNavigation:(null_unspecified WKNavigation *)navigation{
-     webView.opaque = NO;
-     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    webView.opaque = NO;
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     GJ_WebView_DLog(@"--");
 }
 
 #pragma mark 页面加载失败时调用
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error{
-     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     GJ_WebView_DLog(@"--");
 }
 
@@ -183,7 +220,7 @@ WKScriptMessageHandler
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:alertAction];
     [[[self class] GJBase_topViewController] presentViewController:alertController animated:YES completion:nil];
-//    [self presentViewController:alertController animated:YES completion:nil];
+    //    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 
@@ -202,7 +239,7 @@ WKScriptMessageHandler
     [alertController addAction:alertActionCancel];
     [alertController addAction:alertActionOK];
     [[[self class] GJBase_topViewController] presentViewController:alertController animated:YES completion:nil];
-//    [self presentViewController:alertController animated:YES completion:nil];
+    //    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 
@@ -272,9 +309,9 @@ WKScriptMessageHandler
     return rootViewController;
 }
 
-
 - (void)dealloc{
     [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.webView removeObserver:self forKeyPath:@"title"];
+    [self.webView removeObserver:self forKeyPath:@"canGoBack"];
 }
 @end

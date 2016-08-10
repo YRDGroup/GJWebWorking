@@ -15,9 +15,13 @@
 UIWebViewDelegate,
 GJ_NJKWebViewProgressDelegate
 >
+{
+    NSString *_gj_title;
+}
+
 @property (nonnull , nonatomic, readwrite, strong)UIWebView *webView;
 @property (nonnull , nonatomic, readwrite, strong) GJNJKWebViewProgress *progressProxy;
-
+@property (assign ,nonatomic ,readwrite)BOOL gj_webViewCanGoBack;
 
 
 /**
@@ -51,95 +55,133 @@ GJ_NJKWebViewProgressDelegate
 @end
 
 @implementation GJWebViewViewModel
+@synthesize gj_title = _gj_title;
+@synthesize gj_webViewCanGoBack = _gj_webViewCanGoBack;
 
 - (instancetype)init{
     if (self = [super init]) {
         _webView = [[UIWebView alloc]initWithFrame:CGRectZero];
         [_webView addGestureRecognizer:self.swipePanGesture];
+        self.swipePanGesture.enabled = self.snapShotsArray.count > 1;
+        
         _progressProxy = [[GJNJKWebViewProgress alloc]init];
         _webView.delegate = _progressProxy;
         _progressProxy.progressDelegate =self;
         _progressProxy.webViewProxyDelegate = self;
+        
     }
     return self;
 }
 #pragma mark - NJKWebViewProgressDelegate
 -(void)webViewProgress:(GJNJKWebViewProgress *)webViewProgress updateProgress:(float)progress{
-
+    NSString *title = [self.webView stringByEvaluatingJavaScriptFromString:@"document.title"];
+    [self setGj_title:title];
     !_progressBlock?:_progressBlock(_webView,progress);
 }
 #pragma mark - GJWebViewViewModelPortocol
+
+- (void)setGj_title:(NSString *)title{
+ 
+    if ([_gj_title isEqualToString:title]) {
+        return;
+    }
+    [self willChangeValueForKey:@"gj_title"];
+    _gj_title = [title copy];
+    [self didChangeValueForKey:@"gj_title"];
+  
+}
+- (void)gj_goBack{
+    [(UIWebView *)self.webView goBack];
+}
 /**
  *  webView是否可以回退到上一个页面
  */
 
 - (BOOL)gj_webViewCanGoBack{
     BOOL hasURLStack = [_webView canGoBack];
-    if (hasURLStack) {
-        [_webView goBack];
+    if (hasURLStack  != _gj_webViewCanGoBack) {
+        [self setGj_webViewCanGoBack:hasURLStack];
     }
-    return !hasURLStack;
+    return _gj_webViewCanGoBack;
+}
+
+- (void)setGj_webViewCanGoBack:(BOOL)gj_webViewCanGoBack{
+ 
+    if (_gj_webViewCanGoBack == gj_webViewCanGoBack) {
+        return;
+    }
+    [self willChangeValueForKey:@"gj_webViewCanGoBack"];
+    _gj_webViewCanGoBack = gj_webViewCanGoBack;
+    [self didChangeValueForKey:@"gj_webViewCanGoBack"];
+}
+
+- (void)gj_loadRequest:(NSURLRequest *)request{
+    [self.webView loadRequest:request];
 }
 
 #pragma mark - UIWebViewDelegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-//      !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,navigationType);
-    BOOL shouldLoad = YES;
-    if (_shouldStartBlock) {
-        shouldLoad = _shouldStartBlock(webView,request ,navigationType);
-    }
-    if (!shouldLoad) {
-        return shouldLoad;
-    }
+    GJWebNavgitionType navType = GJWKNavigationTypeOther;
     switch (navigationType) {
         case UIWebViewNavigationTypeLinkClicked: {
             [self pushCurrentSnapshotViewWithRequest:request];
+            navType = GJWKNavigationTypeLinkActivated;
             break;
         }
         case UIWebViewNavigationTypeFormSubmitted: {
-            [self pushCurrentSnapshotViewWithRequest:request];
+            navType = GJWKNavigationTypeFormSubmitted;
             break;
         }
         case UIWebViewNavigationTypeBackForward: {
+            navType = GJWKNavigationTypeBackForward;
             break;
         }
         case UIWebViewNavigationTypeReload: {
+            navType = GJWKNavigationTypeReload;
             break;
         }
         case UIWebViewNavigationTypeFormResubmitted: {
+            navType = GJWKNavigationTypeFormResubmitted;
             break;
         }
         case UIWebViewNavigationTypeOther: {
-            [self pushCurrentSnapshotViewWithRequest:request];
+            navType = GJWKNavigationTypeOther;
             break;
         }
         default: {
             break;
         }
     }
-    return shouldLoad;
+    
+   
+    return !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,navType);;
 
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+     self.swipePanGesture.enabled = [webView canGoBack];
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
+     [self setGj_webViewCanGoBack:[webView canGoBack]];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     if (self.prevSnapShotView.superview) {
         [self.prevSnapShotView removeFromSuperview];
     }
-
+     self.swipePanGesture.enabled = [webView canGoBack];
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , nil);
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    [self setGj_webViewCanGoBack:[webView canGoBack]];
+     self.swipePanGesture.enabled = [webView canGoBack];
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , error);
 }
 - (void)dealloc{
+  
     GJ_WebView_DLog(@"dealoc");
 }
-#pragma mark- webViewTransition getter
+
 -(UIView*)swipingBackgoundView{
     if (!_swipingBackgoundView) {
         _swipingBackgoundView = [[UIView alloc] initWithFrame:self.webView.bounds];
@@ -147,21 +189,13 @@ GJ_NJKWebViewProgressDelegate
     }
     return _swipingBackgoundView;
 }
-
+#pragma mark- popGestures
 -(NSMutableArray*)snapShotsArray{
     if (!_snapShotsArray) {
-        _snapShotsArray = [NSMutableArray array];
+        _snapShotsArray = [[NSMutableArray alloc]initWithCapacity:9];
     }
     return _snapShotsArray;
 }
-
--(BOOL)isSwipingBack{
-    if (!_isSwipingBack) {
-        _isSwipingBack = NO;
-    }
-    return _isSwipingBack;
-}
-
 -(UIPanGestureRecognizer*)swipePanGesture{
     if (!_swipePanGesture) {
         _swipePanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipePanGestureHandler:)];
@@ -169,15 +203,8 @@ GJ_NJKWebViewProgressDelegate
     return _swipePanGesture;
 }
 #pragma mark - events handler
-
-
-
-
 -(void)swipePanGestureHandler:(UIPanGestureRecognizer*)panGesture{
     CGPoint translation = [panGesture translationInView:self.webView];
-//    NSLog(@"pan x %f,pan y %f",translation.x,translation.y);
-//    UIViewController *controller = (UIViewController *)self.webView.superview.superview.nextResponder;
-//    controller.navigationController.interactivePopGestureRecognizer.enabled = NO;
     if (panGesture.state == UIGestureRecognizerStateBegan) {//location.x <= 50 &&
         if ( translation.x >= 0) {  //开始动画
             [self startPopSnapshotView];
@@ -194,10 +221,8 @@ GJ_NJKWebViewProgressDelegate
 -(void)pushCurrentSnapshotViewWithRequest:(NSURLRequest*)request{
     // NSLog(@"push with request %@",request);
     NSURLRequest* lastRequest = (NSURLRequest*)[[self.snapShotsArray lastObject]request];
-    
     //如果url是很奇怪的就不push
-    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-        //        // NSLog(@"about blank!! return");
+    if (![request.URL.absoluteString hasPrefix:@"http"]) {
         return;
     }
     //如果url一样就不进行push
@@ -211,6 +236,7 @@ GJ_NJKWebViewProgressDelegate
                                                                snapShotView:currentSnapShotView
                                                                     request:request];
     [self.snapShotsArray addObject:item];
+    [self setGj_webViewCanGoBack:YES];
 }
 
 - (NSArray <GJWebViewBackListItemProtocol>*)gjBackList{
@@ -264,8 +290,6 @@ GJ_NJKWebViewProgressDelegate
     currentSnapshotViewCenter.x += distance;
     CGPoint prevSnapshotViewCenter = CGPointMake(_webView.bounds.size.width/2, _webView.bounds.size.height/2);
     prevSnapshotViewCenter.x -= (_webView.bounds.size.width - distance)*60/_webView.bounds.size.width;
-    //    // NSLog(@"prev center x%f",prevSnapshotViewCenter.x);
-    
     self.currentSnapShotView.center = currentSnapshotViewCenter;
     self.prevSnapShotView.center = prevSnapshotViewCenter;
     self.swipingBackgoundView.alpha = (_webView.bounds.size.width - distance)/_webView.bounds.size.width;
@@ -275,10 +299,6 @@ GJ_NJKWebViewProgressDelegate
     if (!self.isSwipingBack) {
         return;
     }
-    
-    //prevent the user touch for now
-    //self.webView.superview.userInteractionEnabled = NO;
-    
     if (self.currentSnapShotView.center.x >= _webView.bounds.size.width) {
         // pop success
         [UIView animateWithDuration:0.2 animations:^{
@@ -293,8 +313,7 @@ GJ_NJKWebViewProgressDelegate
             [self.snapShotsArray removeLastObject];
             [self.currentSnapShotView removeFromSuperview];
             [self.swipingBackgoundView removeFromSuperview];
-            
-            //self.webView.superview.userInteractionEnabled = YES;
+            [self.webView reload];
             self.isSwipingBack = NO;
         }];
     }else{
@@ -309,7 +328,6 @@ GJ_NJKWebViewProgressDelegate
             [self.prevSnapShotView removeFromSuperview];
             [self.swipingBackgoundView removeFromSuperview];
             [self.currentSnapShotView removeFromSuperview];
-            //self.webView.superview.userInteractionEnabled = YES;
             self.isSwipingBack = NO;
         }];
     }

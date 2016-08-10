@@ -10,6 +10,26 @@
 #import <UIKit/UIKit.h>
 #import "GJWebViewWorking.h"
 #import "GJWebViewBackListItemProtocol.h"
+
+
+/*! @enum WKNavigationType
+ @abstract The type of action triggering a navigation.
+ @constant GJWKNavigationTypeLinkActivated    A link with an href attribute was activated by the user.
+ @constant GJWKNavigationTypeFormSubmitted    A form was submitted.
+ @constant GJWKNavigationTypeBackForward      An item from the back-forward list was requested.
+ @constant GJWKNavigationTypeReload           The webpage was reloaded.
+ @constant GJWKNavigationTypeFormResubmitted  A form was resubmitted (for example by going back, going forward, or reloading).
+ @constant GJWKNavigationTypeOther            Navigation is taking place for some other reason.
+ */
+typedef NS_ENUM(NSUInteger,GJWebNavgitionType) {
+    GJWKNavigationTypeLinkActivated,
+    GJWKNavigationTypeFormSubmitted,
+    GJWKNavigationTypeBackForward,
+    GJWKNavigationTypeReload,
+    GJWKNavigationTypeFormResubmitted,
+    GJWKNavigationTypeOther = -1,
+};
+
 /**
  *  进度条Block
  *
@@ -28,7 +48,7 @@ typedef void (^GJWebViewProgressBlock) (UIView * _Nonnull webView, float progres
  *
  *  @return 是否发起请求
  */
-typedef BOOL (^GJWebShouldStartLoadBlock) (UIView * _Nonnull webView, NSURLRequest * _Nonnull request , UIWebViewNavigationType navigationType);
+typedef BOOL (^GJWebShouldStartLoadBlock) (UIView * _Nonnull webView, NSURLRequest * _Nonnull request , GJWebNavgitionType navigationType);
 /**
  *  webView加载结束时的回调
  *
@@ -59,15 +79,24 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
  */
 @property (nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock _Nullable didFinshLoadBlock;
 
+- (void)gj_loadRequest:(NSURLRequest *)request;
 /**
- *  webView是否可以回退到生一个页面
+ *  webView是否可以回退到生一个页面 此属性可以 KVO
  */
 - (BOOL)gj_webViewCanGoBack;
+/**
+ *  webview会退到上一个页面
+ */
+- (void)gj_goBack;
 
 /**
  *  返回请求列表
  */
 @property (nonnull ,nonatomic ,strong ,readonly)NSArray <GJWebViewBackListItemProtocol > *gjBackList;
+/**
+ *  页面title 可以kvo
+ */
+@property (nullable ,nonatomic ,copy ,readonly)NSString *gj_title;
 
 @end
 
@@ -78,17 +107,16 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 /**
  *  viewModel
  */
-@property (nonnull ,nonatomic ,strong , readonly) id<GJWebViewViewModelPortocol> gjWebViewModel;
+@property (nonnull ,nonatomic ,strong , readonly) NSObject<GJWebViewViewModelPortocol> * gjWebViewModel;
 /**
  *  webView UIWebView 或者是 WKWebView
  */
 @property (nonnull ,nonatomic ,strong ,readonly)UIView  * webView;
 
 @property (nonnull ,nonatomic ,strong ,readonly)UIScrollView *webScrollView;
-/**
- *  webView是否可以回退到生一个页面
- */
-- (BOOL)gj_webViewCanGoBack;
+
+
+
 /**
  *  GJWebView发起一个请求 初始化传入的参数会传入viewModel 中
  *
@@ -101,5 +129,6 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
                    shouldSart:(_Nullable GJWebShouldStartLoadBlock)shouldStart
                      progress:(_Nullable GJWebViewProgressBlock)progress
                       didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad;
+
 
 @end
