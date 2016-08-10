@@ -98,7 +98,7 @@ GJ_NJKWebViewProgressDelegate
  */
 
 - (BOOL)gj_webViewCanGoBack{
-    BOOL hasURLStack = [_webView canGoBack];
+    BOOL hasURLStack = [self.webView canGoBack];
     if (hasURLStack  != _gj_webViewCanGoBack) {
         [self setGj_webViewCanGoBack:hasURLStack];
     }
@@ -175,7 +175,19 @@ GJ_NJKWebViewProgressDelegate
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [self setGj_webViewCanGoBack:[webView canGoBack]];
      self.swipePanGesture.enabled = [webView canGoBack];
+//    NSCachedURLResponse *cashResponse =
+//    [[NSURLCache sharedURLCache] cachedResponseForRequest:webView.request];
+//    //判断是否有缓存
+//    if (cashResponse){
+//        [_webView loadData:cashResponse.data
+//                  MIMEType:cashResponse.response.MIMEType
+//          textEncodingName:cashResponse.response.textEncodingName
+//                   baseURL:cashResponse.response.URL];
+//    }
+    
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , error);
+    
+    
 }
 - (void)dealloc{
   
@@ -309,11 +321,11 @@ GJ_NJKWebViewProgressDelegate
             self.swipingBackgoundView.alpha = 0;
         }completion:^(BOOL finished) {
             
-            [self.webView goBack];
+            [self gj_goBack];
             [self.snapShotsArray removeLastObject];
             [self.currentSnapShotView removeFromSuperview];
             [self.swipingBackgoundView removeFromSuperview];
-            [self.webView reload];
+//            [self.webView reload];
             self.isSwipingBack = NO;
         }];
     }else{
