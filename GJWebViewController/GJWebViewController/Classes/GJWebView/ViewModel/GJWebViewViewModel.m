@@ -150,6 +150,9 @@ GJ_NJKWebViewProgressDelegate
         }
         case UIWebViewNavigationTypeOther: {
             navType = GJWKNavigationTypeOther;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self gj_webViewCanGoBack];
+            });
             break;
         }
         default: {
@@ -157,10 +160,7 @@ GJ_NJKWebViewProgressDelegate
         }
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self gj_webViewCanGoBack];
-        
-    });
+  
    
     return !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,navType);;
 
@@ -329,7 +329,7 @@ GJ_NJKWebViewProgressDelegate
         }completion:^(BOOL finished) {
             
             [self gj_goBack];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self setGj_webViewCanGoBack:[self.webView canGoBack]];
             });
             
