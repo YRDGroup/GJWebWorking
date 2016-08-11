@@ -36,8 +36,8 @@
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-// http://testyingchat.yixinonline.com/webpage/question/index.html#first_page
-static NSString *const gj_webView_default_url = @"https://www.baidu.com";;
+//http://testyingchat.yixinonline.com/webpage/question/index.html#first_page
+static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page";;
 
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;

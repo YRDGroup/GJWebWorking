@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C4558B8FAB9ABCA54A69BC8 /* libPods-GJWebViewController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C49B68DC3B881D5D4A2E2115 /* libPods-GJWebViewController.a */; };
 		9B03256A1D51B3CA0008C4F2 /* GJWebViewBackListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */; };
 		9B0C7C0E1CFEC75C000C9549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C7C0D1CFEC75C000C9549 /* ViewController.m */; };
 		9B27BB2E1D362EDA006EA20E /* GJWebViewViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27BB2D1D362EDA006EA20E /* GJWebViewViewModel.m */; };
@@ -27,6 +28,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		95F25DA3F158FB8000C8834F /* Pods-GJWebViewController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GJWebViewController.release.xcconfig"; path = "Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController.release.xcconfig"; sourceTree = "<group>"; };
 		9B0325681D51B3CA0008C4F2 /* GJWebViewBackListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GJWebViewBackListItem.h; path = ../GJWebViewBackListItem.h; sourceTree = "<group>"; };
 		9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GJWebViewBackListItem.m; path = ../GJWebViewBackListItem.m; sourceTree = "<group>"; };
 		9B03256B1D51BB210008C4F2 /* GJWebViewBackListItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewBackListItemProtocol.h; sourceTree = "<group>"; };
@@ -61,6 +63,8 @@
 		9BD6B7091D38A75200BB0FF8 /* GJNJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJNJKWebViewProgressView.h; sourceTree = "<group>"; };
 		9BD6B70A1D38A75200BB0FF8 /* GJNJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJNJKWebViewProgressView.m; sourceTree = "<group>"; };
 		9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewProtocol.h; sourceTree = "<group>"; };
+		C49B68DC3B881D5D4A2E2115 /* libPods-GJWebViewController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-GJWebViewController.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F191C271F19ABEC435276B37 /* Pods-GJWebViewController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-GJWebViewController.debug.xcconfig"; path = "Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +73,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9BA4E1981D3DD79400F0EFBE /* LocalAuthentication.framework in Frameworks */,
+				2C4558B8FAB9ABCA54A69BC8 /* libPods-GJWebViewController.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -107,6 +112,7 @@
 			children = (
 				C891581C4BF86C22B90EAA81 /* Frameworks */,
 				9B9AE3921CF44FEF0091ECC6 /* GJWebViewController */,
+				C6ADE86EF2B7CD4555D24E16 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -203,10 +209,20 @@
 			path = GJNJKWebViewProgress;
 			sourceTree = "<group>";
 		};
+		C6ADE86EF2B7CD4555D24E16 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F191C271F19ABEC435276B37 /* Pods-GJWebViewController.debug.xcconfig */,
+				95F25DA3F158FB8000C8834F /* Pods-GJWebViewController.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		C891581C4BF86C22B90EAA81 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				9BA4E1971D3DD79400F0EFBE /* LocalAuthentication.framework */,
+				C49B68DC3B881D5D4A2E2115 /* libPods-GJWebViewController.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -218,9 +234,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B9AE3A71CF44FF00091ECC6 /* Build configuration list for PBXNativeTarget "GJWebViewController" */;
 			buildPhases = (
+				6A31A432D7A8541247AA82EF /* 📦 Check Pods Manifest.lock */,
 				9B9AE38C1CF44FEF0091ECC6 /* Sources */,
 				9B9AE38D1CF44FEF0091ECC6 /* Frameworks */,
 				9B9AE38E1CF44FEF0091ECC6 /* Resources */,
+				8E344079DB68E471A18CF16C /* 📦 Embed Pods Frameworks */,
+				8163E4837F5EDC66C572032E /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -275,6 +294,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6A31A432D7A8541247AA82EF /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8163E4837F5EDC66C572032E /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8E344079DB68E471A18CF16C /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9B9AE38C1CF44FEF0091ECC6 /* Sources */ = {
@@ -407,6 +474,7 @@
 		};
 		9B9AE3A81CF44FF00091ECC6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F191C271F19ABEC435276B37 /* Pods-GJWebViewController.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = GJWebViewController/Other/Info.plist;
@@ -418,6 +486,7 @@
 		};
 		9B9AE3A91CF44FF00091ECC6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 95F25DA3F158FB8000C8834F /* Pods-GJWebViewController.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = GJWebViewController/Other/Info.plist;
