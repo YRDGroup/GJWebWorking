@@ -62,6 +62,7 @@ GJ_NJKWebViewProgressDelegate
     if (self = [super init]) {
         _webView = [[UIWebView alloc]initWithFrame:CGRectZero];
         [_webView addGestureRecognizer:self.swipePanGesture];
+        _webView.scalesPageToFit = YES;//自动对页面进行缩放以适应屏幕
         self.swipePanGesture.enabled = self.snapShotsArray.count > 1;
         
         _progressProxy = [[GJNJKWebViewProgress alloc]init];
@@ -91,7 +92,8 @@ GJ_NJKWebViewProgressDelegate
   
 }
 - (void)gj_goBack{
-    [(UIWebView *)self.webView goBack];
+    [self.webView stopLoading];
+    [self.webView goBack];
 }
 /**
  *  webView是否可以回退到上一个页面
@@ -106,10 +108,11 @@ GJ_NJKWebViewProgressDelegate
 }
 
 - (void)setGj_webViewCanGoBack:(BOOL)gj_webViewCanGoBack{
- 
+    self.swipePanGesture.enabled = gj_webViewCanGoBack;
     if (_gj_webViewCanGoBack == gj_webViewCanGoBack) {
         return;
     }
+    
     [self willChangeValueForKey:@"gj_webViewCanGoBack"];
     _gj_webViewCanGoBack = gj_webViewCanGoBack;
     [self didChangeValueForKey:@"gj_webViewCanGoBack"];
@@ -154,13 +157,17 @@ GJ_NJKWebViewProgressDelegate
         }
     }
     
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self gj_webViewCanGoBack];
+        
+    });
    
     return !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,navType);;
 
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-     self.swipePanGesture.enabled = [webView canGoBack];
+    
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
      [self setGj_webViewCanGoBack:[webView canGoBack]];
@@ -168,13 +175,13 @@ GJ_NJKWebViewProgressDelegate
     if (self.prevSnapShotView.superview) {
         [self.prevSnapShotView removeFromSuperview];
     }
-     self.swipePanGesture.enabled = [webView canGoBack];
+    
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , nil);
 }
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [self setGj_webViewCanGoBack:[webView canGoBack]];
-     self.swipePanGesture.enabled = [webView canGoBack];
+    
 //    NSCachedURLResponse *cashResponse =
 //    [[NSURLCache sharedURLCache] cachedResponseForRequest:webView.request];
 //    //判断是否有缓存
@@ -322,10 +329,13 @@ GJ_NJKWebViewProgressDelegate
         }completion:^(BOOL finished) {
             
             [self gj_goBack];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self setGj_webViewCanGoBack:[self.webView canGoBack]];
+            });
+            
             [self.snapShotsArray removeLastObject];
             [self.currentSnapShotView removeFromSuperview];
             [self.swipingBackgoundView removeFromSuperview];
-//            [self.webView reload];
             self.isSwipingBack = NO;
         }];
     }else{
@@ -337,6 +347,7 @@ GJ_NJKWebViewProgressDelegate
             self.prevSnapShotView.center = CGPointMake(_webView.bounds.size.width/2-60, _webView.bounds.size.height/2);
             self.prevSnapShotView.alpha = 1;
         }completion:^(BOOL finished) {
+             [self setGj_webViewCanGoBack:[self.webView canGoBack]];
             [self.prevSnapShotView removeFromSuperview];
             [self.swipingBackgoundView removeFromSuperview];
             [self.currentSnapShotView removeFromSuperview];
