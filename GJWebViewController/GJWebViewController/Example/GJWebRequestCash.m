@@ -7,7 +7,7 @@
 //
 
 #import "GJWebRequestCash.h"
-
+#import "AFNetworkReachabilityManager.h"
 @implementation GJWebRequestCash
 - (NSCachedURLResponse*)cachedResponseForRequest:(NSURLRequest*)request
 {
@@ -25,8 +25,10 @@
 //        [super storeCachedResponse:cachedResponse forRequest:request];
 //        
 //    }
+    if ([AFNetworkReachabilityManager sharedManager].networkReachabilityStatus != AFNetworkReachabilityStatusNotReachable) {
+        return nil;
+    }
     NSCachedURLResponse *cachedURLResponse =  [super cachedResponseForRequest:request];
-    NSURLResponse *response = cachedURLResponse.response;
     return cachedURLResponse;
 }
 @end
