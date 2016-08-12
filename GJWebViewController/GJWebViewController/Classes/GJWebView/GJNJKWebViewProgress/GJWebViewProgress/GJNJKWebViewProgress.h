@@ -25,16 +25,22 @@ extern const float GJ_NJKFinalProgressValue;
 
 typedef void (^GJ_NJKWebViewProgressBlock)(float progress);
 @protocol GJ_NJKWebViewProgressDelegate;
+@protocol GJ_NJK_UIWebViewDelegate ;
 @interface GJNJKWebViewProgress : NSObject<UIWebViewDelegate>
 @property (nonatomic, GJ_njk_weak) id<GJ_NJKWebViewProgressDelegate>progressDelegate;
-@property (nonatomic, GJ_njk_weak) id<UIWebViewDelegate>webViewProxyDelegate;
+@property (nonatomic, GJ_njk_weak) id<GJ_NJK_UIWebViewDelegate>webViewProxyDelegate;
 @property (nonatomic, copy) GJ_NJKWebViewProgressBlock progressBlock;
 @property (nonatomic, readonly) float progress; // 0.0..1.0
 
 - (void)reset;
 @end
+@protocol GJ_NJK_UIWebViewDelegate <UIWebViewDelegate>
 
+- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request;
+
+@end
 @protocol GJ_NJKWebViewProgressDelegate <NSObject>
+
 - (void)webViewProgress:(GJNJKWebViewProgress *)webViewProgress updateProgress:(float)progress;
 @end
 

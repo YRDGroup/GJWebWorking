@@ -82,6 +82,7 @@ GJ_NJKWebViewProgressDelegate
 #pragma mark - GJWebViewViewModelPortocol
 
 - (void)setGj_title:(NSString *)title{
+    
     if ([_gj_title isEqualToString:title]) {
         return;
     }
@@ -125,7 +126,6 @@ GJ_NJKWebViewProgressDelegate
     GJWebNavgitionType navType = GJWKNavigationTypeOther;
     switch (navigationType) {
         case UIWebViewNavigationTypeLinkClicked: {
-            [self pushCurrentSnapshotViewWithRequest:request];
             navType = GJWKNavigationTypeLinkActivated;
             break;
         }
@@ -181,6 +181,10 @@ GJ_NJKWebViewProgressDelegate
     [self setGj_webViewCanGoBack:[webView canGoBack]];
     _didFinshLoadBlock?:_didFinshLoadBlock(webView , error);
     
+}
+
+- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request{
+    [self pushCurrentSnapshotViewWithRequest:request];
 }
 #pragma mark- popGestures
 -(NSMutableArray*)snapShotsArray{

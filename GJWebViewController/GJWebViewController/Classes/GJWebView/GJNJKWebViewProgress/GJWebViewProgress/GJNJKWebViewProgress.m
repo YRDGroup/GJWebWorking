@@ -76,7 +76,7 @@ const float GJ_NJKFinalProgressValue = 0.9f;
 }
 
 #pragma mark -
-#pragma mark UIWebViewDelegate
+#pragma mark GJ_NJK_UIWebViewDelegate
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
@@ -100,8 +100,12 @@ const float GJ_NJKFinalProgressValue = 0.9f;
 
     BOOL isHTTP = [request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"];
     if (ret && !isFragmentJump && isHTTP && isTopLevelNavigation) {
+        if ([_webViewProxyDelegate respondsToSelector:@selector(webviewWillStartNewPageRequest:)]) {
+             [_webViewProxyDelegate webviewWillStartNewPageRequest:request];
+        }
         _currentURL = request.URL;
         [self reset];
+        
     }
     return ret;
 }
