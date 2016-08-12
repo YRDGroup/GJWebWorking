@@ -36,8 +36,9 @@
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-//
-static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page";;
+
+//@"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page"
+static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
@@ -96,6 +97,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
     request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
+   
     [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavgitionType navigationType) {
 //        NSURL *url = request.URL;
 //        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
