@@ -19,7 +19,7 @@
  
  NSURLRequestReturnCacheDataElseLoad = 2, 无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么从原始地址加载数据
  NSURLRequestReturnCacheDataDontLoad = 3,无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么放弃从原始地址加载数据，请求视为失败（即：“离线”模式）。
- 
+
  NSURLRequestReloadRevalidatingCacheData = 5, // Unimplemented 指定如果已存的缓存数据被提供它的源段确认为有效则允许使用缓存数据响应请求，否则从源段加载数据。
  *
  *
@@ -95,7 +95,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     [self makeWebBGView];
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
-    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:60];
+    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
     [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavgitionType navigationType) {
 //        NSURL *url = request.URL;
 //        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {

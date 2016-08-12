@@ -167,6 +167,7 @@ GJ_NJKWebViewProgressDelegate
     
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView{
+//    webView 
      [self setGj_webViewCanGoBack:[webView canGoBack]];
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     if (self.prevSnapShotView.superview) {

@@ -79,7 +79,7 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
  */
 @property (nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock _Nullable didFinshLoadBlock;
 
-- (void)gj_loadRequest:(NSURLRequest *)request;
+- (void)gj_loadRequest:(NSURLRequest *_Nullable)request;
 /**
  *  webView是否可以回退到生一个页面 此属性可以 KVO
  */

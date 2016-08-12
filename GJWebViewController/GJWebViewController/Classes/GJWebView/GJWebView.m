@@ -40,10 +40,8 @@
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
         
            }
-    NSURLCache *urlCache = [NSURLCache sharedURLCache];
-    /* 设置缓存的大小为1M*/
-    [urlCache setMemoryCapacity:80*1024*1024];
-    [urlCache  setDiskCapacity:1024*1024*1024];
+    NSURLCache *urlCache = [[NSURLCache alloc] initWithMemoryCapacity:80 * 1024 * 1024 diskCapacity:200 * 1024 * 1024 diskPath:nil];
+    [NSURLCache setSharedURLCache:urlCache];
     return self;
 }
 
