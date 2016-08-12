@@ -118,7 +118,8 @@ typedef void (^GJWebViewDidFinishLoadBlock) (UIView * _Nonnull webView,NSError *
 
 
 /**
- *  GJWebView发起一个请求 初始化传入的参数会传入viewModel 中
+ *  GJWebView发起一个请求 初始化传入的参数会传入viewModel中
+ *  需要注意的是 这些 block 会被 viewModel 持有 注意循环引用
  *
  *  @param request      NSURLRequest
  *  @param shouldStart  将要发起请求的block 会多次请求

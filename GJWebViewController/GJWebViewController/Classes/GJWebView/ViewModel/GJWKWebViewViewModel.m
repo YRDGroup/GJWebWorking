@@ -23,7 +23,9 @@ WKScriptMessageHandler
 
 @implementation GJWKWebViewViewModel
 @synthesize gj_webViewCanGoBack = _gj_webViewCanGoBack;
+@synthesize gj_title = _gj_title;
 
+#pragma mark -lifeCircle
 - (instancetype)init{
     if (self = [super init]) {
         WKUserContentController *userContentController = [[WKUserContentController alloc] init];
@@ -44,12 +46,51 @@ WKScriptMessageHandler
 - (void)resetState{
     [self gj_webViewCanGoBack];
 }
++ (UIViewController *)GJBase_topViewController{
+    return [self GJBase_topViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
+}
 
++ (UIViewController *)GJBase_topViewController:(UIViewController *)rootViewController
+{
+    if (rootViewController.presentedViewController) {
+        return [self GJBase_topViewController:rootViewController.presentedViewController];
+    }
+    
+    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
+        UINavigationController *navigationController = (UINavigationController *)rootViewController;
+        return [self GJBase_topViewController:[navigationController.viewControllers lastObject]];
+    }
+    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
+        UITabBarController *tabController = (UITabBarController *)rootViewController;
+        return [self GJBase_topViewController:tabController.selectedViewController];
+    }
+    return rootViewController;
+}
+
+- (void)dealloc{
+    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
+    [self.webView removeObserver:self forKeyPath:@"title"];
+    [self.webView removeObserver:self forKeyPath:@"canGoBack"];
+}
+
+
+#pragma mark - GJWebViewViewModelPortocol
+- (void)setGj_title:(NSString *)title{
+    
+    if ([_gj_title isEqualToString:title]) {
+        return;
+    }
+    [self willChangeValueForKey:@"gj_title"];
+    _gj_title = [title copy];
+    [self didChangeValueForKey:@"gj_title"];
+    
+}
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     if ([keyPath isEqualToString:@"estimatedProgress"]) {
         !_progressBlock?:_progressBlock(_webView,_webView.estimatedProgress);
     }
     if ([keyPath isEqualToString:@"title"]) {
+        [self setGj_title:self.webView.title];
     }
     if ([keyPath isEqualToString:@"canGoBack"]) {
        [self setGj_webViewCanGoBack:[change[NSKeyValueChangeNewKey] boolValue]];
@@ -151,6 +192,9 @@ WKScriptMessageHandler
         decisionHandler(WKNavigationActionPolicyCancel);
         return;
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"");
+    });
      decisionHandler(WKNavigationActionPolicyAllow);
     
 }
@@ -288,30 +332,4 @@ WKScriptMessageHandler
 }
 
 
-+ (UIViewController *)GJBase_topViewController{
-    return [self GJBase_topViewController:[UIApplication sharedApplication].keyWindow.rootViewController];
-}
-
-+ (UIViewController *)GJBase_topViewController:(UIViewController *)rootViewController
-{
-    if (rootViewController.presentedViewController) {
-        return [self GJBase_topViewController:rootViewController.presentedViewController];
-    }
-    
-    if ([rootViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *navigationController = (UINavigationController *)rootViewController;
-        return [self GJBase_topViewController:[navigationController.viewControllers lastObject]];
-    }
-    if ([rootViewController isKindOfClass:[UITabBarController class]]) {
-        UITabBarController *tabController = (UITabBarController *)rootViewController;
-        return [self GJBase_topViewController:tabController.selectedViewController];
-    }
-    return rootViewController;
-}
-
-- (void)dealloc{
-    [self.webView removeObserver:self forKeyPath:@"estimatedProgress"];
-    [self.webView removeObserver:self forKeyPath:@"title"];
-    [self.webView removeObserver:self forKeyPath:@"canGoBack"];
-}
 @end

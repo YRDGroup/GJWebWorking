@@ -36,8 +36,8 @@
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-//http://testyingchat.yixinonline.com/webpage/question/index.html#first_page
-static NSString *const gj_webView_default_url = @"https:www.baidu.com";;
+//
+static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page";;
 
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
@@ -87,8 +87,8 @@ static NSString *const gj_webView_default_url = @"https:www.baidu.com";;
     [self.view addSubview:_gjWebView];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeTop multiplier:1 constant:64]];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
     [self makeWebBGView];
     __weak typeof(self) wSelf = self;
     NSURLRequest *request = nil;
