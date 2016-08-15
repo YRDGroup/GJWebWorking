@@ -2,7 +2,7 @@
 //  GJWebViewViewModelPortocol.h
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/8/15.
+//  Created by Alien on 16/8/15.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 

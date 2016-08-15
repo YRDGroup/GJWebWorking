@@ -7,16 +7,10 @@
 //
 /**
  *
- 
- 
-
- 
  NSURLRequestUseProtocolCachePolicy = 0,对特定的 URL 请求使用网络协议中实现的缓存逻辑。这是默认的策略。
- 
  NSURLRequestReloadIgnoringLocalCacheData = 1,数据需要从原始地址加载。不使用现有缓存。
  NSURLRequestReloadIgnoringLocalAndRemoteCacheData = 4, // Unimplemented 不仅忽略本地缓存，同时也忽略代理服务器或其他中间介质目前已有的、协议允许的缓存
  NSURLRequestReloadIgnoringCacheData = NSURLRequestReloadIgnoringLocalCacheData,无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么从原始地址加载数据
- 
  NSURLRequestReturnCacheDataElseLoad = 2, 无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么从原始地址加载数据
  NSURLRequestReturnCacheDataDontLoad = 3,无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么放弃从原始地址加载数据，请求视为失败（即：“离线”模式）。
 
@@ -39,7 +33,6 @@
 
 //@"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page"
 static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page";;
-
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
 @end
@@ -143,7 +136,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
         //        }
         if ([webView isKindOfClass:[UIWebView class]]) {
             UIWebView *aWebView = (UIWebView *)webView;
-            _bgView.titleLabel.text = [NSString stringWithFormat:@"网页由%@提供",aWebView.request.URL.host];
+            wSelf.bgView.titleLabel.text = [NSString stringWithFormat:@"网页由%@提供",aWebView.request.URL.host];
         }
         return  YES;
     } progress:^(UIView * _Nonnull webView, float progress) {
@@ -186,7 +179,6 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
 
 - (void)makeWebBGView{
     __GJWebBGView *view = [[__GJWebBGView alloc]initWithFrame:self.view.bounds];
-//    view.titleLabel.text = _bgLabelText?:@"网页有www.yirendai.com提供";
      [self.gjWebView.webView insertSubview:view belowSubview:self.gjWebView.webScrollView];
     self.bgView = view;
 }
@@ -204,10 +196,9 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
 
 
 - (void)didReceiveMemoryWarning {
+    
     [super didReceiveMemoryWarning];
 }
-
-
 
 - (void)dealloc{
     [_gjWebView.gjWebViewModel removeObserver:self forKeyPath:@"gj_webViewCanGoBack"];

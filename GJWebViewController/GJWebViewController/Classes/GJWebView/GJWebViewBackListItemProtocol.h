@@ -2,7 +2,7 @@
 //  GJWebViewBackListItemProtocol.h
 //  GJWebViewController
 //
-//  Created by 张旭东 on 16/8/3.
+//  Created by Alien on 16/8/3.
 //  Copyright © 2016年 Alien. All rights reserved.
 //
 
