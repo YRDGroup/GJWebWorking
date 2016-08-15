@@ -100,8 +100,9 @@ const float GJ_NJKFinalProgressValue = 0.9f;
 
     BOOL isHTTP = [request.URL.scheme isEqualToString:@"http"] || [request.URL.scheme isEqualToString:@"https"];
     if (ret && !isFragmentJump && isHTTP && isTopLevelNavigation) {
-        if ([_webViewProxyDelegate respondsToSelector:@selector(webviewWillStartNewPageRequest:)]) {
-             [_webViewProxyDelegate webviewWillStartNewPageRequest:request];
+        if ([_webViewProxyDelegate respondsToSelector:@selector(webviewWillStartNewPageRequest:navigationType:)]) {
+            GJWebNavigationType navType = gj_webViewnavigationTypeToGJNavigation(navigationType);
+             [_webViewProxyDelegate webviewWillStartNewPageRequest:request navigationType:navType];
         }
         _currentURL = request.URL;
         [self reset];

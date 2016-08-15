@@ -123,43 +123,7 @@ GJ_NJKWebViewProgressDelegate
 
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    GJWebNavgitionType navType = GJWKNavigationTypeOther;
-    switch (navigationType) {
-        case UIWebViewNavigationTypeLinkClicked: {
-            navType = GJWKNavigationTypeLinkActivated;
-            break;
-        }
-        case UIWebViewNavigationTypeFormSubmitted: {
-            navType = GJWKNavigationTypeFormSubmitted;
-            break;
-        }
-        case UIWebViewNavigationTypeBackForward: {
-            navType = GJWKNavigationTypeBackForward;
-            break;
-        }
-        case UIWebViewNavigationTypeReload: {
-            navType = GJWKNavigationTypeReload;
-            break;
-        }
-        case UIWebViewNavigationTypeFormResubmitted: {
-            navType = GJWKNavigationTypeFormResubmitted;
-            break;
-        }
-        case UIWebViewNavigationTypeOther: {
-            navType = GJWKNavigationTypeOther;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self gj_webViewCanGoBack];
-            });
-            break;
-        }
-        default: {
-            break;
-        }
-    }
-    
-  
-   
-    return !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,navType);;
+    return !_shouldStartBlock? YES:_shouldStartBlock(webView,request ,gj_webViewnavigationTypeToGJNavigation(navigationType));;
 
 }
 - (void)webViewDidStartLoad:(UIWebView *)webView{
@@ -183,8 +147,14 @@ GJ_NJKWebViewProgressDelegate
     
 }
 
-- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request{
-    [self pushCurrentSnapshotViewWithRequest:request];
+- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request navigationType:(GJWebNavigationType)navigationType{
+    if (GJWKNavigationTypeOther == navigationType || GJWKNavigationTypeLinkActivated == navigationType) {
+        [self pushCurrentSnapshotViewWithRequest:request];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5* NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self gj_webViewCanGoBack];
+        });
+    }
+    
 }
 #pragma mark- popGestures
 -(NSMutableArray*)snapShotsArray{
@@ -307,11 +277,14 @@ GJ_NJKWebViewProgressDelegate
             self.prevSnapShotView.center = CGPointMake(_webView.bounds.size.width/2, _webView.bounds.size.height/2);
             self.swipingBackgoundView.alpha = 0;
         }completion:^(BOOL finished) {
-            
             [self gj_goBack];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self setGj_webViewCanGoBack:[self.webView canGoBack]];
             });
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self.prevSnapShotView removeFromSuperview];
+            });
+
             
             [self.snapShotsArray removeLastObject];
             [self.currentSnapShotView removeFromSuperview];
@@ -327,7 +300,7 @@ GJ_NJKWebViewProgressDelegate
         self.prevSnapShotView.center = CGPointMake(_webView.bounds.size.width/2-60, _webView.bounds.size.height/2);
         self.prevSnapShotView.alpha = 1;
     }completion:^(BOOL finished) {
-         [self setGj_webViewCanGoBack:[self.webView canGoBack]];
+        [self setGj_webViewCanGoBack:[self.webView canGoBack]];
         [self.prevSnapShotView removeFromSuperview];
         [self.swipingBackgoundView removeFromSuperview];
         [self.currentSnapShotView removeFromSuperview];

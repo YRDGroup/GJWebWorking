@@ -83,50 +83,6 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     // Do any additional setup after loading the view, typically from a nib.
    
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
-    _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:_gjWebView];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeTop multiplier:1 constant:64]];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
-    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
-    [self makeWebBGView];
-    __weak typeof(self) wSelf = self;
-    NSURLRequest *request = nil;
-    [self makeWebBGView];
-    [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
-    [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
-    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
-   
-    [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavgitionType navigationType) {
-//        NSURL *url = request.URL;
-//        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
-//            
-//            return NO;
-//        }
-//        
-//        //分享请求
-//        if ([url.absoluteString hasPrefix:GCJSShareAPI]) {
-//            
-//            return NO;
-//        }
-//        //注册
-//        if ([url.absoluteString hasPrefix:GCJSRegisterAPI]) {
-//            
-//            return NO;
-//        }
-//        //跳转购买宜定盈页面接口（buyProduct API）
-//        if ([url.absoluteString hasPrefix:GCJSBuyProductAPI]) {
-//            
-//            return NO;
-//        }
-        return  YES;
-    } progress:^(UIView * _Nonnull webView, float progress) {
-   
-        [wSelf.progressView setProgress:progress animated:YES];
-    } didFinshLoad:^(UIView * _Nonnull webView, NSError * _Nullable error) {
-        NSLog(@"%@ --- %@",webView , error);
-    }];
     
 }
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
@@ -146,6 +102,58 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     if (self.navigationController) {
         [self.customNavgationBar addSubview:self.progressView];
     }
+    if (_gjWebView) {
+        return;
+    }
+    _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
+    _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:_gjWebView];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeTop multiplier:1 constant:64]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
+    [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
+    [self makeWebBGView];
+    __weak typeof(self) wSelf = self;
+    NSURLRequest *request = nil;
+    [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
+    [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
+    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
+    
+    [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavigationType navigationType) {
+        //        NSURL *url = request.URL;
+        //        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
+        //
+        //            return NO;
+        //        }
+        //
+        //        //分享请求
+        //        if ([url.absoluteString hasPrefix:GCJSShareAPI]) {
+        //
+        //            return NO;
+        //        }
+        //        //注册
+        //        if ([url.absoluteString hasPrefix:GCJSRegisterAPI]) {
+        //
+        //            return NO;
+        //        }
+        //        //跳转购买宜定盈页面接口（buyProduct API）
+        //        if ([url.absoluteString hasPrefix:GCJSBuyProductAPI]) {
+        //
+        //            return NO;
+        //        }
+        if ([webView isKindOfClass:[UIWebView class]]) {
+            UIWebView *aWebView = (UIWebView *)webView;
+            _bgView.titleLabel.text = [NSString stringWithFormat:@"网页由%@提供",aWebView.request.URL.host];
+        }
+        return  YES;
+    } progress:^(UIView * _Nonnull webView, float progress) {
+        [wSelf.progressView setProgress:progress animated:YES];
+    } didFinshLoad:^(UIView * _Nonnull webView, NSError * _Nullable error) {
+        
+        
+        NSLog(@"%@ --- %@",webView , error);
+    }];
+
     
 }
 - (void)viewDidDisappear:(BOOL)animated{
@@ -178,7 +186,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
 
 - (void)makeWebBGView{
     __GJWebBGView *view = [[__GJWebBGView alloc]initWithFrame:self.view.bounds];
-    view.titleLabel.text = _bgLabelText?:@"网页有www.yirendai.com提供";
+//    view.titleLabel.text = _bgLabelText?:@"网页有www.yirendai.com提供";
      [self.gjWebView.webView insertSubview:view belowSubview:self.gjWebView.webScrollView];
     self.bgView = view;
 }

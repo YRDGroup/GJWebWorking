@@ -44,6 +44,7 @@
 		9B31850D1D394F7E003B8E0C /* UIViewController+BackButtonHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+BackButtonHandler.m"; sourceTree = "<group>"; };
 		9B3732851D5DC57300B2A2F8 /* GJWebRequestCash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebRequestCash.h; sourceTree = "<group>"; };
 		9B3732861D5DC57300B2A2F8 /* GJWebRequestCash.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GJWebRequestCash.m; sourceTree = "<group>"; };
+		9B8770261D61658D0076C26B /* GJWebViewViewModelPortocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewViewModelPortocol.h; sourceTree = "<group>"; };
 		9B9AE3901CF44FEF0091ECC6 /* GJWebViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GJWebViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B9AE3941CF44FEF0091ECC6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9B9AE3961CF44FEF0091ECC6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -103,6 +104,7 @@
 				9B1D1F771D38F3AC0029A400 /* ViewModel */,
 				9BD6B7011D37EBC300BB0FF8 /* GJWebView.h */,
 				9BD6B7021D37EBC300BB0FF8 /* GJWebView.m */,
+				9B8770261D61658D0076C26B /* GJWebViewViewModelPortocol.h */,
 				9BFE1C111D377C9C00F84647 /* GJWebViewProtocol.h */,
 				9B27BB321D363231006EA20E /* GJWebViewWorking.h */,
 				9B03256B1D51BB210008C4F2 /* GJWebViewBackListItemProtocol.h */,

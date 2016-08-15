@@ -7,6 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "GJWebViewWorking.h"
 /**
  *  声明 此类事用了  NJKWebViewProgress 的  NJKWebViewProgress https://github.com/ninjinkun/NJKWebViewProgress
  *  为了避免在引入过程中出现错误,所以修改了名字，如果侵权立即删除。十分感谢 https://github.com/ninjinkun 作者的辛勤付出。
@@ -36,7 +37,7 @@ typedef void (^GJ_NJKWebViewProgressBlock)(float progress);
 @end
 @protocol GJ_NJK_UIWebViewDelegate <UIWebViewDelegate>
 
-- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request;
+- (void)webviewWillStartNewPageRequest:(NSURLRequest *)request navigationType:(GJWebNavigationType)navigationType;
 
 @end
 @protocol GJ_NJKWebViewProgressDelegate <NSObject>

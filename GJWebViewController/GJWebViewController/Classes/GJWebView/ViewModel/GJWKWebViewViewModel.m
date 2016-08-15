@@ -165,7 +165,7 @@ WKScriptMessageHandler
         return;
     }
     
-    GJWebNavgitionType navType = GJWKNavigationTypeOther;
+    GJWebNavigationType navType = GJWKNavigationTypeOther;
     switch (navigationAction.navigationType) {
         case WKNavigationTypeLinkActivated:
             navType = GJWKNavigationTypeLinkActivated;
