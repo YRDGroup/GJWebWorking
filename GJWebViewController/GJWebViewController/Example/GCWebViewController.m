@@ -30,7 +30,6 @@
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
 #import "GJWebRequestCash.h"
-//@"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page"
 static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
@@ -114,27 +113,7 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
     request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
     
     [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavigationType navigationType) {
-        //        NSURL *url = request.URL;
-        //        if ([url.absoluteString hasPrefix:GCJSLoginAPI]) {
-        //
-        //            return NO;
-        //        }
-        //
-        //        //分享请求
-        //        if ([url.absoluteString hasPrefix:GCJSShareAPI]) {
-        //
-        //            return NO;
-        //        }
-        //        //注册
-        //        if ([url.absoluteString hasPrefix:GCJSRegisterAPI]) {
-        //
-        //            return NO;
-        //        }
-        //        //跳转购买宜定盈页面接口（buyProduct API）
-        //        if ([url.absoluteString hasPrefix:GCJSBuyProductAPI]) {
-        //
-        //            return NO;
-        //        }
+       
         if ([webView isKindOfClass:[UIWebView class]]) {
             UIWebView *aWebView = (UIWebView *)webView;
             wSelf.bgView.titleLabel.text = aWebView.request.URL.host.length > 0?[NSString stringWithFormat:@"网页由%@提供", aWebView.request.URL.host]:@"";
