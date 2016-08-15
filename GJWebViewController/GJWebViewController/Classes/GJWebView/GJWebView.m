@@ -10,7 +10,6 @@
 #import <WebKit/WebKit.h>
 #import "GJWebViewViewModel.h"
 #import "GJWKWebViewViewModel.h"
-#import "GJWebRequestCash.h"
 // ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0)
 #define gj_webView_isWKWebAvailable 0
 @interface GJWebView(){
@@ -41,8 +40,6 @@
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
         
            }
-    NSURLCache *urlCache = [[GJWebRequestCash alloc] initWithMemoryCapacity:80 * 1024 * 1024 diskCapacity:200 * 1024 * 1024 diskPath:nil];
-    [NSURLCache setSharedURLCache:urlCache];
     return self;
 }
 

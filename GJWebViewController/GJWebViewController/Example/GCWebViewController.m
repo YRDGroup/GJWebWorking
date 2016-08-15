@@ -13,7 +13,6 @@
  NSURLRequestReloadIgnoringCacheData = NSURLRequestReloadIgnoringLocalCacheData,无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么从原始地址加载数据
  NSURLRequestReturnCacheDataElseLoad = 2, 无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么从原始地址加载数据
  NSURLRequestReturnCacheDataDontLoad = 3,无论缓存是否过期，先使用本地缓存数据。如果缓存中没有请求所对应的数据，那么放弃从原始地址加载数据，请求视为失败（即：“离线”模式）。
-
  NSURLRequestReloadRevalidatingCacheData = 5, // Unimplemented 指定如果已存的缓存数据被提供它的源段确认为有效则允许使用缓存数据响应请求，否则从源段加载数据。
  *
  *
@@ -30,9 +29,9 @@
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-
+#import "GJWebRequestCash.h"
 //@"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page"
-static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonline.com/webpage/question/index.html#first_page";;
+static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
 @end
@@ -98,6 +97,8 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     if (_gjWebView) {
         return;
     }
+    NSURLCache *urlCache = [[GJWebRequestCash alloc] initWithMemoryCapacity:80 * 1024 * 1024 diskCapacity:200 * 1024 * 1024 diskPath:nil];
+    [NSURLCache setSharedURLCache:urlCache];
     _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
     _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_gjWebView];
@@ -110,7 +111,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
     NSURLRequest *request = nil;
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
-    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:60];
+    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
     
     [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavigationType navigationType) {
         //        NSURL *url = request.URL;
@@ -136,7 +137,7 @@ static NSString *const gj_webView_default_url = @"http://testyingchat.yixinonlin
         //        }
         if ([webView isKindOfClass:[UIWebView class]]) {
             UIWebView *aWebView = (UIWebView *)webView;
-            wSelf.bgView.titleLabel.text = [NSString stringWithFormat:@"网页由%@提供",aWebView.request.URL.host];
+            wSelf.bgView.titleLabel.text = aWebView.request.URL.host.length > 0?[NSString stringWithFormat:@"网页由%@提供", aWebView.request.URL.host]:@"";
         }
         return  YES;
     } progress:^(UIView * _Nonnull webView, float progress) {
