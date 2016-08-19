@@ -29,7 +29,6 @@
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-#import "GJWebRequestCash.h"
 static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
@@ -96,9 +95,7 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
     if (_gjWebView) {
         return;
     }
-    NSURLCache *urlCache = [[GJWebRequestCash alloc] initWithMemoryCapacity:80 * 1024 * 1024 diskCapacity:200 * 1024 * 1024 diskPath:nil];
-    [NSURLCache setSharedURLCache:urlCache];
-    _gjWebView = [[GJWebView alloc]initWithFrame:CGRectZero];
+    _gjWebView = [[GJWebView alloc]initWithWebKitType:GJWebViewWebKitTypeUIWebView];
     _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_gjWebView];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
