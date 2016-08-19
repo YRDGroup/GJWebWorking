@@ -9,6 +9,25 @@
 #ifndef GJWebViewWorking_h
 #define GJWebViewWorking_h
 
+/**
+ *  GJWebView 所使用的WebView 控件类型
+ */
+typedef NS_ENUM(NSInteger,GJWebViewWebKitType) {
+    /**
+     *  根据版本自动选择 iOS8 以下使用 UIWebView iOS8以上使用WKWebView
+     */
+    GJWebViewWebKitTypeAuto,
+    /**
+     *  使用UIWebView
+     */
+    GJWebViewWebKitTypeUIWebView,
+    /**
+     *  使用WKWebView
+     */
+    GJWebViewWebKitTypeWKWebView,
+};
+
+
 /*! @enum WKNavigationType
  @abstract The type of action triggering a navigation.
  @constant GJWKNavigationTypeLinkActivated    A link with an href attribute was activated by the user.

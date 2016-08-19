@@ -22,25 +22,45 @@
 @synthesize webView = _webView;
 @synthesize gjWebViewModel = _gjWebViewModel;
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame WebKitType:(GJWebViewWebKitType)webKitType {
     if (self = [super initWithFrame:frame]) {
-        if (gj_webView_isWKWebAvailable) {
-            _gjWebViewModel = [[GJWKWebViewViewModel alloc]init];
-            _webView = _gjWebViewModel.webView;
-           
-        }else{
-            _gjWebViewModel = [[GJWebViewViewModel alloc]init];
-            _webView = _gjWebViewModel.webView;
-        }
-         [self addSubview:_webView];
+        _webKitType = webKitType;
+        _gjWebViewModel = [self getWebViewManagerWithWebKitType];
+        _webView = _gjWebViewModel.webView;
+        [self addSubview:_webView];
         _webView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
         [self addConstraint:[NSLayoutConstraint  constraintWithItem:_webView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-        
-           }
+    }
     return self;
+}
+
+- (instancetype)initWithWebKitType:(GJWebViewWebKitType)webKitType{
+    return [self initWithFrame:CGRectZero WebKitType:webKitType];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    return [self initWithFrame:frame WebKitType:GJWebViewWebKitTypeAuto];
+}
+
+- (id<GJWebViewViewModelPortocol>)getWebViewManagerWithWebKitType{
+    id<GJWebViewViewModelPortocol> viewManager = nil;
+    switch (_webKitType) {
+        case GJWebViewWebKitTypeAuto:
+            viewManager = gj_webView_isWKWebAvailable ?[[GJWKWebViewViewModel alloc]init] :[[GJWebViewViewModel alloc]init];
+            break;
+        case GJWebViewWebKitTypeUIWebView:
+            viewManager = [[GJWebViewViewModel alloc]init];
+            break;
+        case GJWebViewWebKitTypeWKWebView:
+            viewManager = [[GJWKWebViewViewModel alloc]init];
+            break;
+        default:
+            break;
+    }
+    return viewManager;
 }
 
 - (void)gj_webViewLoadRequest:(NSURLRequest * _Nonnull)request
@@ -54,11 +74,10 @@
 }
 
 - (UIScrollView *)webScrollView{
-    if (gj_webView_isWKWebAvailable) {
+    if ([_webView isKindOfClass:[WKWebView class]]) {
         return [(WKWebView *)_webView scrollView];
-    }else{
-        return [(UIWebView *)_webView scrollView];
     }
+    return [(UIWebView *)_webView scrollView];
 }
 
 

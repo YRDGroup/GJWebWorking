@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "GJWebViewProtocol.h"
-@interface GJWebView : UIView <GJWebViewProtocol>
 
+
+@interface GJWebView : UIView <GJWebViewProtocol>
+@property (nonatomic ,assign ,readonly)GJWebViewWebKitType webKitType;
+- (instancetype)initWithWebKitType:(GJWebViewWebKitType)webKitType;
+- (instancetype)initWithFrame:(CGRect)frame WebKitType:(GJWebViewWebKitType)webKitType;
 @end
