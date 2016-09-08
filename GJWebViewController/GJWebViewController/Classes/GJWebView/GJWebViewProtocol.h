@@ -43,4 +43,23 @@
                       didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad;
 
 
+/**
+ *  GJWebView加载本地的html 初始化传入的参数会传入viewModel中
+ *  需要注意的是 这些 block 会被 viewModel 持有 注意循环引用
+ *
+ *  @param string       htmlStr
+ *  @param baseURL      baseURL
+ *  @param shouldStart  将要发起请求的block 会多次请求
+ *  @param progress     进度条的Block
+ *  @param didFinshLoad 加载完成的Block
+ */
+- (void)gj_webViewLoadHTMLString:( NSString * _Nullable )string
+                         baseURL:(nullable NSURL *)baseURL
+                   shouldSart:(_Nullable GJWebShouldStartLoadBlock)shouldStart
+                     progress:(_Nullable GJWebViewProgressBlock)progress
+                 didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad;
+
+
+
+
 @end

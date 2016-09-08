@@ -1,4 +1,3 @@
 target 'GJWebViewController' do
   pod 'WebViewJavascriptBridge', '> 5.0'
-  pod 'AFNetworking'
 end

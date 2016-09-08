@@ -73,6 +73,17 @@
     [_gjWebViewModel gj_loadRequest:request];  
 }
 
+- (void)gj_webViewLoadHTMLString:( NSString * _Nullable )string
+                         baseURL:(nullable NSURL *)baseURL
+                      shouldSart:(_Nullable GJWebShouldStartLoadBlock)shouldStart
+                        progress:(_Nullable GJWebViewProgressBlock)progress
+                    didFinshLoad:(_Nullable GJWebViewDidFinishLoadBlock)didFinshLoad{
+    _gjWebViewModel.shouldStartBlock = shouldStart;
+    _gjWebViewModel.progressBlock = progress;
+    _gjWebViewModel.didFinshLoadBlock = didFinshLoad;
+    [_gjWebViewModel gj_loadHTMLString:string baseURL:baseURL];
+}
+
 - (UIScrollView *)webScrollView{
     if ([_webView isKindOfClass:[WKWebView class]]) {
         return [(WKWebView *)_webView scrollView];

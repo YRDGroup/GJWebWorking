@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2C4558B8FAB9ABCA54A69BC8 /* libPods-GJWebViewController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C49B68DC3B881D5D4A2E2115 /* libPods-GJWebViewController.a */; };
 		9B03256A1D51B3CA0008C4F2 /* GJWebViewBackListItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */; };
+		9B03DA971D81122F000D807C /* ExampleApp.html in Resources */ = {isa = PBXBuildFile; fileRef = 9B03DA961D81122F000D807C /* ExampleApp.html */; };
 		9B0C7C0E1CFEC75C000C9549 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B0C7C0D1CFEC75C000C9549 /* ViewController.m */; };
 		9B27BB2E1D362EDA006EA20E /* GJWebViewViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27BB2D1D362EDA006EA20E /* GJWebViewViewModel.m */; };
 		9B27BB311D3630C3006EA20E /* GJWKWebViewViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B27BB301D3630C3006EA20E /* GJWKWebViewViewModel.m */; };
@@ -31,6 +32,7 @@
 		9B0325681D51B3CA0008C4F2 /* GJWebViewBackListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GJWebViewBackListItem.h; path = ../GJWebViewBackListItem.h; sourceTree = "<group>"; };
 		9B0325691D51B3CA0008C4F2 /* GJWebViewBackListItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GJWebViewBackListItem.m; path = ../GJWebViewBackListItem.m; sourceTree = "<group>"; };
 		9B03256B1D51BB210008C4F2 /* GJWebViewBackListItemProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewBackListItemProtocol.h; sourceTree = "<group>"; };
+		9B03DA961D81122F000D807C /* ExampleApp.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = ExampleApp.html; sourceTree = "<group>"; };
 		9B0C7C0C1CFEC75C000C9549 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		9B0C7C0D1CFEC75C000C9549 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		9B27BB2C1D362EDA006EA20E /* GJWebViewViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GJWebViewViewModel.h; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 		9BC3267E1D377F95005493CB /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				9B03DA961D81122F000D807C /* ExampleApp.html */,
 				9BA67F4C1D5B0C4C00777478 /* GCWebViewController.h */,
 				9BA67F4D1D5B0C4C00777478 /* GCWebViewController.m */,
 				9B9AE3991CF44FF00091ECC6 /* GJWebViewController.h */,
@@ -231,12 +234,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9B9AE3A71CF44FF00091ECC6 /* Build configuration list for PBXNativeTarget "GJWebViewController" */;
 			buildPhases = (
+				327642E4A06E6596F541D6BD /* 📦 Check Pods Manifest.lock */,
 				6A31A432D7A8541247AA82EF /* [CP] Check Pods Manifest.lock */,
 				9B9AE38C1CF44FEF0091ECC6 /* Sources */,
 				9B9AE38D1CF44FEF0091ECC6 /* Frameworks */,
 				9B9AE38E1CF44FEF0091ECC6 /* Resources */,
 				8E344079DB68E471A18CF16C /* [CP] Embed Pods Frameworks */,
 				8163E4837F5EDC66C572032E /* [CP] Copy Pods Resources */,
+				92DEAD6CB740F699599FE225 /* 📦 Embed Pods Frameworks */,
+				569E051050EC19C72E03AC4B /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -287,12 +293,43 @@
 				9B9AE3A31CF44FF00091ECC6 /* LaunchScreen.storyboard in Resources */,
 				9B9AE3A01CF44FF00091ECC6 /* Assets.xcassets in Resources */,
 				9B9AE39E1CF44FF00091ECC6 /* Main.storyboard in Resources */,
+				9B03DA971D81122F000D807C /* ExampleApp.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		327642E4A06E6596F541D6BD /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		569E051050EC19C72E03AC4B /* 📦 Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		6A31A432D7A8541247AA82EF /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -331,6 +368,21 @@
 			inputPaths = (
 			);
 			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-GJWebViewController/Pods-GJWebViewController-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		92DEAD6CB740F699599FE225 /* 📦 Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;

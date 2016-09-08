@@ -16,4 +16,5 @@ GJWebViewViewModelPortocol
 @property (nullable, nonatomic ,copy, readwrite)GJWebShouldStartLoadBlock shouldStartBlock;
 @property (nullable, nonatomic ,copy, readwrite)GJWebViewProgressBlock  progressBlock;
 @property (nullable, nonatomic ,copy, readwrite)GJWebViewDidFinishLoadBlock  didFinshLoadBlock;
+
 @end

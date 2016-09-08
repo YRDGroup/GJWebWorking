@@ -28,10 +28,13 @@
 #import "GJWebViewViewModel.h"
 #import "GJWebViewProtocol.h"
 #import "GJWebView.h"
+#import "WebViewJavascriptBridge.h"
 #import "UINavigationController+FDFullscreenPopGesture.h"
-static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
+static NSString *const gj_webView_default_url = @"http://www.baidu.com";
+
 @interface __GJWebBGView : UIView
 @property (nonatomic ,strong,readonly)UILabel *titleLabel;
+
 @end
 @implementation __GJWebBGView
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -62,7 +65,10 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 @property (strong ,nonatomic, readwrite)__GJWebBGView *bgView;
 @property (strong, nonatomic ,readwrite)GJWebView *gjWebView;
 
-
+/**
+ *  jsBridge
+ */
+@property (nonnull , nonatomic, readwrite, strong) WebViewJavascriptBridge* jsBridge;
 @end
 
 @implementation GCWebViewController
@@ -96,6 +102,7 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
         return;
     }
     _gjWebView = [[GJWebView alloc]initWithWebKitType:GJWebViewWebKitTypeUIWebView];
+    [self setupJavascriptBridge];
     _gjWebView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_gjWebView];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1 constant:0]];
@@ -103,13 +110,22 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view  attribute:NSLayoutAttributeRight multiplier:1 constant:0]];
     [self.view addConstraint:[NSLayoutConstraint  constraintWithItem:_gjWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];
     [self makeWebBGView];
+    
+    
     __weak typeof(self) wSelf = self;
-    NSURLRequest *request = nil;
+    NSString* htmlPath = [[NSBundle mainBundle] pathForResource:@"ExampleApp" ofType:@"html"];
+    NSString* appHtml = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    NSURL *baseURL = [NSURL fileURLWithPath:htmlPath];
+//    [_webView loadHTMLString:appHtml baseURL:baseURL];
+
+//    NSURLRequest *request = nil;
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_webViewCanGoBack" options:NSKeyValueObservingOptionNew context:nil];
     [_gjWebView.gjWebViewModel addObserver:self forKeyPath:@"gj_title" options:NSKeyValueObservingOptionNew context:nil];
-    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
+//    request =[NSURLRequest requestWithURL:[NSURL URLWithString:gj_webView_default_url] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60];
     
-    [_gjWebView gj_webViewLoadRequest:request shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavigationType navigationType) {
+    [_gjWebView gj_webViewLoadHTMLString:appHtml
+                                 baseURL:baseURL
+                              shouldSart:^BOOL(UIView * _Nonnull webView, NSURLRequest * _Nonnull request, GJWebNavigationType navigationType) {
        
         if ([webView isKindOfClass:[UIWebView class]]) {
             UIWebView *aWebView = (UIWebView *)webView;
@@ -126,6 +142,27 @@ static NSString *const gj_webView_default_url = @"http://www.baidu.com";;
 
     
 }
+
+- (void)setupJavascriptBridge{
+    [WebViewJavascriptBridge enableLogging];
+    UIWebView *webView = (UIWebView *)_gjWebView.webView;
+    id<UIWebViewDelegate> delegate = webView.delegate;
+    _jsBridge = [WebViewJavascriptBridge bridgeForWebView:webView];
+    [_jsBridge setWebViewDelegate:delegate];
+    [_jsBridge registerHandler:@"testObjcCallback" handler:^(id data, WVJBResponseCallback responseCallback) {
+        NSLog(@"testObjcCallback called: %@", data);
+        responseCallback(@"Response from testObjcCallback");
+    }];
+}
+#pragma mark- WebViewJavascriptBridge
+- (void)callHandler:(id)sender {
+    id data = @{ @"greetingFromObjC": @"Hi there, JS!" };
+    [_jsBridge callHandler:@"testJavascriptHandler" data:data responseCallback:^(id response) {
+        NSLog(@"testJavascriptHandler responded: %@", response);
+    }];
+}
+
+
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     [self.progressView removeFromSuperview];
